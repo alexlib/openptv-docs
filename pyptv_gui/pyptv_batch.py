@@ -156,18 +156,28 @@ def run_batch(new_seq_first,new_seq_last):
 	par.SequenceParams(n_img, base_name,\
 									   new_seq_first, new_seq_last, path = par.temp_path).write()
 	# if you need sequence and tracking:
-	sequence_tracking(n_img)
+	# sequence_tracking(n_img)
 	
 	# if you need sequence only:
-	# sequence(n_img)
+	sequence(n_img)
 
 
 if __name__ == '__main__':
 
-	try:
-		seq_first = sys.argv[2]
-		seq_last = sys.argv[3]
-		run_batch(eval(seq_first),eval(seq_last))
-	except:
-		print("something wrong with the software or folder")
-		general.printException()
+	import time
+
+	start = time.time()
+	repetitions = 10
+	
+	for i in range(repetitions):
+
+		try:
+			seq_first = sys.argv[2]
+			seq_last = sys.argv[3]
+			run_batch(eval(seq_first),eval(seq_last))
+		except:
+			print("something wrong with the software or folder")
+			general.printException()
+		
+	end = time.time()
+	print 'time lapsed %f sec' % (end - start)

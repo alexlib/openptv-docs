@@ -25,6 +25,6 @@ void find_candidate_plus_msg(coord_2d crd[], target pix[], int num,
 void find_candidate_plus(coord_2d crd[], target pix[], int num,
     double xa, double ya, double xb, double yb,
     int n, int nx, int ny, int sumg, candidate cand[], int *count, int nr,
-    volume_par *vpar);
+    volume_par *vpar, int is_sorted);
 
 #endif

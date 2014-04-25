@@ -500,8 +500,9 @@ int correspondences_proc_c ()
         for (i_img = 0; i_img < cpar->num_cams; i_img++) init_mmLUT(i_img);
         mmp.lut = 1;
     }
-    
+  
     correspondences_4 (vpar, cpar);
+
     
     /* --------------- */
     /* save pixel coords for tracking */

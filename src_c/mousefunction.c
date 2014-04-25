@@ -64,10 +64,11 @@ int mouse_proc_c (int click_x, int click_y, int kind, int num_image,
 		   
 		   /* search candidate in img[i] */
 		   printf("\ncandidates in img: %d\n", i);
-		   find_candidate_plus_msg (geo[i], pix[i], num[i],
+		   find_candidate_plus (geo[i], pix[i], num[i],
 					    xa12, ya12, xb12, yb12,
 					    pix[n][pt1].n, pix[n][pt1].nx, pix[n][pt1].ny,
-					    pix[n][pt1].sumg, cand, &count, i, vpar);
+					    pix[n][pt1].sumg, cand, &count, i, vpar, 0);
+					    /* last integer is is_sorted */
 
 		   distort_brown_affin (xa12,ya12, ap[i], &xa12,&ya12);
 		   distort_brown_affin (xb12,yb12, ap[i], &xb12,&yb12);

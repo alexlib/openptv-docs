@@ -144,7 +144,7 @@ double *xp, *yp, *zp;
 }
 
 void find_candidate_plus (crd, pix, num, xa,ya,xb,yb, n, nx, ny, sumg,
-						  cand, count, nr, vpar)
+						  cand, count, nr, vpar, is_sorted)
 /*  binarized search in a x-sorted coord-set, exploits shape information  */
 
 coord_2d	crd[];
@@ -155,7 +155,9 @@ int    		n, nx, ny, sumg;
 candidate	cand[];
 int	       	nr;	       	/* image number for ap etc. */
 volume_par *vpar;
+int         is_sorted; /* testing how long it takes to do all the IF */
 //const char** argv;
+
 
 
 {
@@ -166,6 +168,7 @@ volume_par *vpar;
   double       	xmin, xmax, ymin, ymax,particle_size;
   int dumbbell=0;
   double tol_band_width;
+  
   
 //Beat Mai 2010 for dumbbell
 
@@ -265,6 +268,10 @@ volume_par *vpar;
                  qny >= vpar->cny && qsumg > vpar->csumg) {
 
 				 if ( *count < maxcand) {
+				 
+				    if (is_sorted == 1) cand[*count].pnr = j;
+			        else cand[*count].pnr = p2;
+			        
 			        cand[*count].pnr = j;
 			        cand[*count].tol = d;
 			        cand[*count].corr = corr;
