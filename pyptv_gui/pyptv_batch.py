@@ -167,7 +167,7 @@ if __name__ == '__main__':
 	import time
 
 	start = time.time()
-	repetitions = 10
+	repetitions = 1 # 10 or 100 for heavy load
 	
 	for i in range(repetitions):
 
