@@ -2,6 +2,8 @@
 Tutorials
 ==========
 
+Tutorial videos
+------------------
 
 Please, see our screencasts for the quick overview and the step-by-step tutorial:
 
@@ -13,8 +15,8 @@ If you want to practice, install the software and **download** the necessary fil
 
 
 
-Tutorial
----------
+Calibratoin
+----------------
 
 
 New experiment:

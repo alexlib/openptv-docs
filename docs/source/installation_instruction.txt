@@ -283,9 +283,10 @@ We recommend using WinPython, Pythonxy, Canopy (Enthought) or Anaconda (Continuu
 * PyQt
 
 
-
+Q&A
+--------------------------------------
 If nothing works, where I can get help?  
----------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Send your build logs, description of the problem and details of the operating system, Python version, etc. to::
 
@@ -293,8 +294,7 @@ Send your build logs, description of the problem and details of the operating sy
 
 
 If I do not want to build or test the software, can I use pre-compiled binaries?
----------------------------------------------------------------------------------
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Mac OS X users can use the `pre-compiled try-before-installing instructions <https://github.com/OpenPTV/openptv-python/wiki/Getting-started-using-OpenPTV-Python-on-Mac-OS-X>`_
 
 For Linux and Windows it is possible to download the appropriate pre-compiled library files: `liboptv installers <http://goo.gl/MqDzP>`_
@@ -307,7 +307,7 @@ add the location of the ``liboptv`` files in the next step, e.g.::
 
 
 If I do not want to use package managers but to get all the Python packages at once?
-------------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can get one of the Python development environments for your platform. Some had good experiences with WinPython, PythonXY, Canopy and later Anaconda. NOTE THAT WE HAVE NOT TESTED PYTHON 3 AND WE ARE USING AND SUPPORTING PYTHON 2.X. 
 

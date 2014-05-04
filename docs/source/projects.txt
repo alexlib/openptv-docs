@@ -1,0 +1,1120 @@
+============================
+Showcases of the 3D-PTV projects
+============================
+
+3D-PTV benchmark proposal for the COST Action MP0806 Particles in Turbulence
+===========================
+
+3D-PTV benchmark program
+---------------------------
+Introduction
+^^^^^^^^^^^^^^^^^^^^^^^^^
+WG1 meeting in Zurich (August 2009) concluded that the three-dimensional particle tracking velocimetry (3D-PTV) is one of the established experimental approaches in the field of Particles in Turbulence. As a consequence, many algorithms, software packages have been developed over years by various research groups worldwide. This action is an attempt to learn best practices from each and to develop the open source particle tracking velocimetry that will combine the know-how of all the involved parties.
+
+The first step, proposed during that meeting, was to develop few test cases that different research groups can use to test their own algorithms and software. The report of the groups will help to identify those performing best at different stages of the analysis and to expose the best practices to the other members of the action. There is a single important condition - open science. The codes, algorithms, data should be open to all the members of the action. The main goal is to make particle tracking better and accessible. 
+
+Test cases
+^^^^^^^^^^^^^^^^^^^^^^^^^
+At the moment there are few test cases available. These are of the two major types:
+
+1.Synthetic images - for the demonstration purposes, we use the Standard PIV Images project. Specifically, we use the 3D standard images: <http://www.piv.jp/image3d/image-e.html>.
+
+2.Real experimental data 
+
+Synthetic images test cases
+^^^^^^^^^^^^^^^^^^^^^^^^^
+There are four cases on the Standard 3D Images website `[1] <http://www.piv.jp/image3d/image-e.html>`_ that seem to fit our purpose of testing the tracking software packages:
+
+    Transient 3D flow field from 3 angles with wall refrection
+    Case 351 (Jet Shear flow)
+
+	+ Number of particles = 2000
+        + Camera calibration Images are imX999.raw 
+
+    (x,y,z) = (-0.8:0.0:0.8, -0.8:0.0:0.8, -0.8:0.0:0.8) 27 points
+
+        + Three-cameras are on the holizontal plane 
+
+    Case 352 (Jet Shear flow)
+
+        + Number of particles = 300
+        + Camera calibration Images are imX999.raw 
+
+    (x,y,z) = (-0.8:0.0:0.8, -0.8:0.0:0.8, -0.8:0.0:0.8) 27 points
+
+        + Three-cameras are on the holizontal plane 
+
+    Transient 3D flow field from 3 angles with unknown wall refrection
+    Case 371 (Jet Shear flow)
+
+        + Number of particles = 500
+        + Camera calibration Images are imX999.raw 
+
+    (x,y,z) = (-0.4:0.0:0.4, -0.4:0.0:0.4, -0.4:0.0:0.4) 27 points
+
+        + camera parameters are not known 
+
+    Case 377 (Jet Impinging flow)
+
+        + Number of particles = 500
+        + Camera calibration Images are imX999.raw 
+
+    (x,y,z) = (-0.2:0.0:0.2, -0.2:0.0:0.2, -0.2:0.0:0.2) 125 points
+
+        + cameras are set at the bottom of impinging plates 
+
+
+As we see, we can process the various cases and compare our algorithms versus the
+
+    + given particle positions (aspects of stereo-matching, center-of-gravity, calibration and camera models, etc.)
+    + given tracking (aspects of tracking, length of trajectory, filters along the trajectory, post-tracking "gluing" algorithms, etc.) 
+
+For example, comparing the case 352 and 371 will show if the effect of "known" vs "unknown" wall reflections on your camera model, comparing case 351 wit 352 will show the traceability parameter best, where the number of particles density is much higher in the "same" flow in case 351. 
+
+How to prepare and post the test case
+^^^^^^^^^^^^^^^^^^^^^^^^^
+For the demonstration purposes, we use the test case no 352: "Transient 3D flow field from 3 angles with wall refrection". We find that the way Standard PIV Images project defined the test cases is simple and comprehensible. We suggest to adopt this way of formatting your experimental data for the test case. Below we report the way 3D-PTV software (ETH Zurich) is used to analyze the case #352 and to report the results for further analysis. 
+
+General description
+
+1.Demo images- to provide a quick overview
+Source:
+
+|image0|
+
+2.Textual information of the authors:
+
+PIV Three-dimensional Standard Images #352
+
+Generator: K. Okamoto (Univ. Tokyo) Program: ddr.c Date: March 27, 1998 
+
+3.Parameters::
+
+	Target Flow Field:  Jet impinging on the Wall
+	Reynolds Number:    3000
+	                     2cm
+        ------------|   |------------
+                      |  15cm/s
+                      V
+                     XXX
+                     XXX
+        -----------------------------
+	Number of Particles inserted in the field       1000 Particles
+	Number of Particles visualized in one Image      320 Particles(average)
+	Diameter of Particles      5 pixel (average)
+                         	   2       (standard deviation)
+                        	   1       (minimum)
+	Maximum Velocity                 12 cm/s
+	Target Flow field                2cm x 2cm x 2cm
+	Time Interval between images     5 msec
+	Laser Illumination               Cylindrical from bottom (radius = 5cm) [almost whole illumination]
+	Water refractive index           1.33
+	Wall distance                    3 cm from center
+	orientation                 parallel to #1 camera image
+
+4. Camera positions::
+
+	#0  Distance from center      20 cm
+	angle to X axis          -30 degree
+
+        #1  Distance from center      20 cm
+        angle to X axis            0 degree
+
+        #2  Distance from center      20 cm
+        angle to X axis           30 degree
+	
+	No orientation variations were considered.
+
+5. Sketch of the coordinate system::
+
+                                  ^ y
+                                   |
+                                   |/
+                       ------------+---------------> x
+                                  /|
+                                 / |
+                                /
+                               /z
+                              L
+	
+	TOP VIEW
+                                 |
+                                O| Particles
+                   --------------+-----------------> x-axis
+                                /|
+                               / |
+                              /  |        n=1.33(water)
+                   ==============|===================== WALL
+                            /    |        n=1.00(air)
+                           /theta|
+                          / (-30)|(30)
+                         /       |
+                       #0        |        #2 camera
+                    camera       |
+                                #1 camera
+                                 |
+                                 | z-axis
+                                 V 
+
+6. Data description
+
+Image Files (imX???.raw)::
+
+	X:    camera# (0-2)
+	???:  serial# (000-144)   Total 720msec
+	Image size  256x256 pixel (8bit:256)
+
+	Calibration File (imX999.raw)
+  	 Particles (Total 27 particles)
+    	  x = -0.8, 0, 0.8 cm
+    	  y = -0.8, 0, 0.8 cm
+    	  z = -0.8, 0, 0.8 cm
+
+Vector files(vec???.dat)::
+
+	  x      y      z        u         v         w
+	-0.80  -0.80  -0.80   0.17542  -4.51977   0.01204
+	-0.80  -0.80  -0.60  -0.18245  -4.11870  -0.26516
+	-0.80  -0.80  -0.40  -0.78761  -3.38484  -0.41633
+	
+	unit: x,y,z  [cm]
+              u,v,w  [cm/s]
+
+Particle Files(ptc???.dat)::
+
+	#1 camera     #2 camera     #3 camera  intensity
+	ID    x      y      z      X      Y      X      Y      X      Y
+	4 -0.301  0.584  0.893 147.61  64.91  95.55  65.10  53.07  65.92 208.18
+	6 -0.898  1.266 -0.258   0.00   0.00   0.00   0.00  46.22   0.15 208.69
+	8  1.178  0.886  0.149 249.88  38.07 251.10  35.42 219.99  32.46 191.52
+	9  0.720 -1.242 -0.530 183.76 252.88 201.24 254.40   0.00   0.00 211.21
+
+	unit: x,y,z  [cm]
+        X,Y    [pixel]
+
+
+
+	The particle ID is unique number, therefore, the same particle could be easily tracked with checking the ID for serial particle files.
+
+Thanks to the authors of the Standard 3D PIV Images: Dr. Okamoto (okamoto@tokai.t.u-tokyo.ac.jp)
+
+`Back to top <http://www.openptv.net/docs/projects.html>`_
+
+PIV Standard Images test case 352
+-------------------------
+Test case #352 PIV STD project
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Synthetic data were used to validate the algorithm. The synthetic data were from the PIV-STD library that was developed by the Visualization Society of Japan and served as the benchmark for many PIV/PTV research efforts (Okamoto et al 2000, Ruhnau et al 2005, Kim and Sung 2006). Data set 352 was chosen, which describes a jet flow impinging on a wall. The flow is transient and three dimensional. Data from Camera 0, frame 0–89 were adopted. At each frame, about 300 particles were in the observed region, which has a size of 256 by 256 pixels. The fluid motion was captured by three cameras. The particle spacing displacement ratio (PSDR), which is defined as the ratio of the average particle spacing to the mean particle displacement between two consecutive frames and serves as an important indicator to the difficulty of the tracking process (Malik et al 1993), is about 3.4 for thewhole image domain. However, compared to the left half of the images, the right half contained denser particles and larger particle displacement (see figures 4 and 5), which results in a lower PSDR. The PSDR is about 2.6 for the right half of the image domain and about 2.2 for the right quarter of the image domain. Such a small value makes it hard to track particles through 90 frames (Malik et al 1993). 
+
+[A multi-frame particle tracking algorithm robust against input noise, by Dongning Li, Yuanhui Zhang, Yigang Sun andWei Yan, Meas. Sci. Technol. 19 (2008) 105401 ]
+
+3D-PTV software applied to the test case #352 (Standard PIV Images project)
+
+
+Here we report the technical procedures, the results and the analysis of the case #352 processed using 3D-PTV software (ETH Zurich, Tel Aviv University). 
+
+1. Download images and the data for the test case #352 from the original web site http://piv.vsj.or.jp/piv/image3d/image352.html (just in case the website/data will disappear, we'll keep a local copy on our web server)
+
+2. Obtain 3D-PTV software from the website: http://www.openptv.net/docs/ (for Windows platforms, if no source is needed, the ZIP file below includes the executable, so it's plug-n-play ready test case) 
+
+
+Pre-processing procedure
+
+Download the ZIP file with the directory ready for use with the software. Extract the file into the experiment directory, e.g. C:/PTV/test352
+
+verify it has the directory structure::
+
+	C:/PTV/test352 
+			/img
+			/res
+			/cal
+			/parameters
+	read more about the software handling on http://www.openptv.net/docs/add_doc.html
+
+1. convert RAW images to TIFF images (no compression, 8 bit). On Windows , IrfanView (with plugins) used for batch image conversion and rename. 
+
+image0XXX.raw -> cam1.1XXX (1XXX= 1000 to 1144). Note that we also name our cameras: 1,2,3 as the PIV STD project calls them 0,1,2
+
+move the images into the the sub-directory /img
+
+2. We already converted the calibration images: im0999.raw -> cam1.tif, im1999.raw -> cam2.tif, im2999.raw -> cam3.tif
+
+and added the calibration images to the sub-directory /cal
+
+Basically, we convert the information provided for this test case into the calibration files, compatible with the 3D-PTV software. The camera configuration is well explained on the Evaluation of standard PIV images website by Georges Quenot from http://www-clips.imag.fr/mrim/georges.quenot/vsj-eval/evaluation3.html
+
+This is precisely the same coordinate system as used by the 3D-PTV software. Therefore the conversion of the parameters is easy:
+
+in the /cal directory you'll find the *.ORI files for each camera. These consist of::
+
+	101.8263 -9.9019 65.1747 projective center X,Y,Z, [mm]
+	0.4151383 -0.0069793 1.5073263 omega, phi, kappa [rad]
+	0.0634259 -0.9979621 -0.0069792 rotation matrix (3x3)
+	0.9130395 0.0608491 -0.4033067 [no unit]
+	0.4029095 0.0192078 0.9150383
+	-0.6139 -0.0622 xp, yp [mm]
+	8.7308 principle distance [mm]
+	0.0 0.0 30.0 window (glass) location [mm] 
+	so the three cameras are oriented approximately: 
+
+	cam1.tif.ori 
+	-100.3781      0.0117    173.0085
+        0.0000154  -0.5432731  -0.0000624
+        0.8560213  0.0000534 -0.5169406
+       -0.0000704  1.0000000 -0.0000132
+        0.5169406  0.0000477  0.8560213
+        0.0000   0.0000
+        20.0000
+        0.000000000000000    0.000000000000000    30.000000000000000
+
+	cam2.tif.ori
+        0.4331     -0.0829    199.4893
+        0.0005046   0.0022530   0.0001731
+        0.9999974 -0.0001731  0.0022530
+        0.0001743  0.9999999 -0.0005046
+       -0.0022529  0.0005050  0.9999973
+        0.0000   0.0000
+        20.0000	
+        0.000000000000000    0.000000000000000    30.000000000000000
+
+	cam3.tif.ori 
+        101.0432      0.0872    172.5569
+        -0.0004084   0.5476053   0.0000590
+        0.8537737 -0.0000503  0.5206442
+        -0.0001537  0.9999999  0.0003487
+        -0.5206442 -0.0003777  0.8537737
+        0.0000   0.0000
+        20.0000
+        0.000000000000000    0.000000000000000    30.000000000000000
+
+	Calibration File (imX999.raw)
+	Particles (Total 27 particles)
+	x = -0.8, 0, 0.8 cm
+	y = -0.8, 0, 0.8 cm
+	z = -0.8, 0, 0.8 cm	
+	is converted into a text file in the format, compatible with the 3D-PTV software - four columns of: ID, X, Y, Z, using the Matlab code (attached to the ZIP file):
+	   1    -8    -8    -8
+	   2    -8     0    -8
+	   3    -8     8    -8
+	   4     0    -8    -8
+	   5     0     0    -8
+	   6     0     8    -8
+	   7     8    -8    -8
+	   8     8     0    -8
+	   9     8     8    -8
+	  10    -8    -8     0
+	  11    -8     0     0
+	  12    -8     8     0
+	  13     0    -8     0
+	  14     0     0     0
+	  15     0     8     0
+	  16     8    -8     0
+	  17     8     0     0
+	  18     8     8     0
+	  19    -8    -8     8
+	  20    -8     0     8
+	  21    -8     8     8
+	  22     0    -8     8
+	  23     0     0     8
+	  24     0     8     8
+	  25     8    -8     8
+	  26     8     0     8
+	  27     8     8     8
+	Processing (particle locations, stereo-matching, 3D positions, tracking) is then according to the standard 3D-PTV procedure. All the parameters are given in the ZIP file and reproduced here as a snapshot of the respective menus:
+	Following 3D-PTV tutorials we proceed with:
+	Start -> Tracking -> Sequence/Tracking to complete the full cycle of processing. The results appear in two subdirectories:
+
+	2D particle locations in pixels, per camera in /img directory, named cam?.1XXX_targets
+	3D particle locations and tracking information in /res directory named ptv_is.1XXX
+
+Comparsion of results
+
++ `3D-PTV <datahttp://dl.dropbox.com/u/5266698/3dptv_testcase_352.zip>`_
+
++ `PIV <http://dl.dropbox.com/u/5266698/piv_std_352.tgz>`_
+
+`Back to top <http://www.openptv.net/docs/projects.html>`_
+
+test case 371
+-------------------------
+Introduction
+^^^^^^^^^^^^^^^^^^^^^^^^^
+Recent WG1 meeting in Zurich was our Experimental Workshop. It was roposed during that meeting that we develop few test cases that different research groups can use to test their own algorithms and software. The report of the groups will help to identify those performing best at different stages of the analysis and to expose the best practices to the other members of the action. There is a single important condition - open science. The codes, algorithms, data should be open to all the members of the action. The main goal is to make particle tracking better and accessible. 
+
+Benchmark proposal 1
+^^^^^^^^^^^^^^^^^^^^^^^^^
+We propose to start with the synthetic images, created from a known velocity field. Such images and data are available from the PIV Standard Images Project `[1] <http://www.piv.jp/image3d/image-e.html>`_. Here we describe the test case #377 (which is slightly more tricky due to an unknown wall reflection and camera positions).
+
+we keep a mirror copy of the data for the case 352 on `case 352 copy <http://dl.dropbox.com/u/5266698/piv_std_352.tgz>`_
+
+|image0|
+
+Here we first copy the original description of the experimental conditions from their case 377 website::
+
+    No.      377    Unit
+    Image Size      256 x 256       pixel
+    Area    1 x 1   cm
+    Laser Illumination      Volume  mm
+    Interval        0.001   sec
+    Max. Velocity   10      pixel/interval
+    Max. out-of-plane Velocity      ??      %
+    DATA DOWNLOAD
+     
+    * The format of the images are RAW data.[64KB]
+    * The particle data file[100KB] contains; (1) particle ID, (2-4) particle 3d location [x,y,z] (cm),
+    (5,6) particle location in Image 0 [X,Y] and (7,8) particle location in Image 1 [X,Y] and
+    (9,10) particle location in Image 2 [X,Y] and (11) maximum intensity of the particle [I].
+    The particle ID is unique, so that the same particle location could be correctly tracked with using
+    the serial particle files. Please see the example
+    * The vector file[50KB] contains; (1-3) node of the image (X,Y,Z) [cm] and (4-6)
+    vector (U,V,W) in the unit of [cm/s] Please see the example
+     
+     
+    PIV Three-dimensional Standard Images    #377
+     
+     
+    Generator:  K. Okamoto  (Univ. Tokyo)
+    Program:    ddr.c
+    Date:       March 27, 1998
+     
+     
+    Parameters:
+     Target Flow Field:  Jet impinging on the Wall
+     Reynolds Number:    3000
+     
+                          2cm
+             ------------|   |------------
+                           |  15cm/s
+                           V
+     
+     
+                        XXX
+                        XXX
+             -----------------------------
+     
+     Number of Particles inserted in the field      40000 Particles
+     Number of Particles visualized in one Image      500 Particles (average)
+     
+     Diameter of Particles      5 pixel (average)
+                                2       (standard deviation)
+                                1       (minimum)
+     
+     Maximum Velocity                 12 cm/s
+     Target Flow field                5mm x 5mm x 5mm
+     Time Interval between images     1 msec
+     
+     Laser Illumination               Cylindrical from bottom (radius = 1cm)
+     
+     Water refractive index           1.33
+     Wall distance                    7 mm from center
+          orientation                 y-direction  (simulate impinging plate)
+     
+     Camera positions
+        #0  (x,y,z) = (5.77, -10, 0)
+     
+        #1  (x,y,z) = (-2.88, -10, -5)
+     
+        #2  (x,y,z) = (-2.88, -10, 5)
+     
+     
+      Small Orientation variations were considered.
+     
+     
+                                        ^ y
+                                        |
+                                        |/
+                            ------------+---------------> x
+                                  #2   /|
+                                      / |      #1
+                              #3     /
+                                    /z
+                                   L
+     
+     
+               Side View              ^
+                                 Jet  | y-axis
+                                      |
+                                     O| Particles
+                        --------------+-----------------> x-axis
+                                     /|        n=1.33(water)
+                        ==============|2mm==================
+                                   /  |        n=1.33(acryl)
+                        ==============|7mm================== WALL
+                                 /    |        n=1.00(air)
+                                /     |
+                               /      |
+                              /       |
+                            #2,3      |        #0 camera
+                         camera       |
+                                      |
+     
+                The wall surface is (y=-7mm)
+                Jet impinging plate is (y=-2mm)
+                Visualized region is (-2,-2,-2) < (x,y,z) < (2,2,2)mm
+     
+     
+     
+     
+    Image Files (imX???.raw)
+     
+      X:    camera# (0-2)
+      ???:  serial# (000-200)   Total 200msec
+     
+      Image size  256x256 pixel (8bit:256)
+     
+     
+     
+     Calibration File (imX999.raw)
+       Particles (Total 125 particles)
+         x = -0.2, -0.1, 0, 0.1, 0.2 cm
+         y = -0.2, -0.1, 0, 0.1, 0.2 cm
+         z = -0.2, -0.1, 0, 0.1, 0.2 cm
+     
+     
+     
+    Vector files  (vec???.dat)
+     
+       x      y      z        u         v         w
+     -0.80  -0.80  -0.80   0.17542  -4.51977   0.01204
+     -0.80  -0.80  -0.60  -0.18245  -4.11870  -0.26516
+     -0.80  -0.80  -0.40  -0.78761  -3.38484  -0.41633
+     
+       unit: x,y,z  [cm]
+             u,v,w  [cm/s]
+     
+     
+    Particle Files  (ptc???.dat)
+                                 #1 camera     #2 camera     #3 camera  intensity
+       ID    x      y      z      X      Y      X      Y      X      Y
+        4 -0.301  0.584  0.893 147.61  64.91  95.55  65.10  53.07  65.92 208.18
+        6 -0.898  1.266 -0.258   0.00   0.00   0.00   0.00  46.22   0.15 208.69
+        8  1.178  0.886  0.149 249.88  38.07 251.10  35.42 219.99  32.46 191.52
+        9  0.720 -1.242 -0.530 183.76 252.88 201.24 254.40   0.00   0.00 211.21
+     
+       unit: x,y,z  [cm]
+             X,Y    [pixel]
+     
+       The particle ID is unique number, therefore, the same particle could
+       be easily tracked with checking the ID for serial particle files.
+     
+     
+    If you have any questions, please contact Dr. Okamoto
+    (okamoto@tokai.t.u-tokyo.ac.jp)
+
+Prerequisties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    1.3D-PTV software (it requires ActiveTCL 8.4.x)
+    2.post-processing software
+    3.Matlab (meanwhile, we're trying to move it all to Python/Numpy/Matplotlib)
+
+Download and prepare the test case
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1.Download the images, point and vec files from the origional website using [2] .
+2.Create 3D-PTV directory::
+
+	    C:/PTV/case377
+     			    /img
+     		            /res
+     		            /cal
+     		            /parameters
+
+3. Convert RAW images into TIFF (8 bit) images using IrfanView (on Windows), ImageMagick or Matlab. The name convention is cam1.XXX cam2.XXX cam3.XXX (not .tif extension)
+4. Use the attached [3] Matlab file (remove .txt extension) to generate the calibration images and necessary ASCII files (see  >> help ptc999_to_man_ori_377 for more information).
+5.The orientation of the cameras turned to be quite tricky as the authors didn't mention the rotation around the imaging axis. Never mind, the ORI files are attached (remove .txt extension) . These could be significantly improved using iterative SHAKING algorithm of Beat.
+
+Sample run
+^^^^^^^^^^^^^^^^^^^^
+
+If all the previous steps were successful, then running  start.bat will open the main window. From there, Start, then Tracking -> Sequence/Tracking will be the fastest way of checking it. At the end, Tracking -> Show trajectories should show something of the kind: 
+
+Prepare calibration
+^^^^^^^^^^^^^^^^^^^^^
+::
+		
+    function ptc999_to_man_ori_377(dir1,dir2,midplane)
+    % PTC999_TO_MAN_ORI_377(DIRNAME1,DIRNAME2,MIDPLANE)
+    % takes the PTC999.DAT file from DIRNAME1 as an input
+    % and generates all the necessary files for the 3D-PTV software
+    % (almost) automatic calibration in DIRNAME2:
+    % MAN_ORI.DAT
+    % MAN_ORI.PAR in /parameters
+    % CAL377.TXT
+    % CAM1.TIF, CAM2.TIF, CAM3.TIF in /cal
+    %
+    % There is only CAM1-3.TIF.ORI files are missing.
+    %
+    % MIDPLANE = 0 or 1 (false or true) - useful if only the midplane
+    % points are used for the calibration.
+    %
+    % Author: Alex Liberzon
+    %
+     
+    if ~nargin
+        dir1 = 'c:\PTV\benchmarks\piv_std_377\ptc\';
+        dir2 = 'c:\PTV\Software\sortgrid_from_initial_guess_Oct09\case377\';
+        midplane = 0;
+    end
+    % PTC999_TO_MAN_ORI_377
+     
+    % read ptc999.dat file from the case 377
+    d = load(fullfile(dir1,'ptc999.dat'));
+     
+    cal = fullfile(dir2,'cal377mid.txt');
+    dat = fullfile(dir2,'man_ori.dat');
+    par = fullfile(dir2,'parameters','man_ori.par');
+    cam1 = fullfile(dir2,'cal','cam1.tif');
+    cam2 = fullfile(dir2,'cal','cam2.tif');
+    cam3 = fullfile(dir2,'cal','cam3.tif');
+     
+    % cm -> mm
+    d(:,2:4) = d(:,2:4)*10;
+     
+    % transform axis: x->x y->-z z -> y
+    tmp = d;
+    d(:,3) = tmp(:,4);
+    d(:,4) = -tmp(:,3);
+     
+    % indices:
+    % d(:,1) = d(:,1) + 1;
+     
+    % if one plane only:
+    if midplane
+    midplane = find(d(:,4) == 0);
+    d = d(midplane,:);
+    d(:,1) = 1:size(d,1);
+    id = [1,5,21,25];
+    else
+        d(:,1) = d(:,1) + 1;
+        id = [1,5,121,125];
+    end
+     
+     
+    % write cal377.txt
+    fid = fopen(cal,'w');
+    fprintf(fid,'%5d %9.4f %9.4f %9.4f\n',d(:,1:4)');
+    fclose(fid);
+     
+    % choose points
+    id = [1,5,21,25];
+    fidpar = fopen(par,'w');
+    fiddat = fopen(dat,'w');
+    for i = 1:4
+        fprintf(fidpar,'%3d\n',d(id,1));
+    end
+    for i = 1:4
+        fprintf(fiddat,'%6.3f %6.3f\n',d(id(i),5:6));
+    end
+    for i=1:4
+        fprintf(fiddat,'%6.3f %6.3f\n',d(id(i),7:8));
+    end
+    for i=1:4
+        fprintf(fiddat,'%6.3f %6.3f\n',d(id(i),9:10));
+    end
+     
+    fclose(fidpar);
+    fclose(fiddat);
+     
+    % generate images:
+    % Image generation parameters
+    Radius = 2;
+    sx = 256;
+    sy = 256;
+     
+    %% Cam1
+    x = d(:,5);
+    y = d(:,6);
+    % figure, scatter(x,y)
+    bw = uint8(zeros(sx,sy));
+    for j = 1:length(x)
+        output_coord = plot_circle(x(j),y(j),Radius);
+        bw = imadd(bw,uint8(poly2mask(output_coord(:,1),output_coord(:,2),sx,sy)));
+    end
+    bw(bw>0) = 255;
+    % figure, imshow(bw)
+    imwrite(bw,cam1,'tiff','compression','none')
+     
+    %% Cam1
+    x = d(:,7);
+    y = d(:,8);
+    % figure, scatter(x,y)
+    bw = uint8(zeros(sx,sy));
+    for j = 1:length(x)
+        output_coord = plot_circle(x(j),y(j),Radius);
+        bw = imadd(bw,uint8(poly2mask(output_coord(:,1),output_coord(:,2),sx,sy)));
+    end
+    bw(bw>0) = 255;
+    % figure, imshow(bw)
+    imwrite(bw,cam2,'tiff','compression','none')
+     
+    %% Cam1
+    x = d(:,9);
+    y = d(:,10);
+    % figure, scatter(x,y)
+    bw = uint8(zeros(sx,sy));
+    for j = 1:length(x)
+        output_coord = plot_circle(x(j),y(j),Radius);
+        bw = imadd(bw,uint8(poly2mask(output_coord(:,1),output_coord(:,2),sx,sy)));
+    end
+    bw(bw>0) = 255;
+    % figure, imshow(bw)
+    imwrite(bw,cam3,'tiff','compression','none')
+
+Attachment
+^^^^^^^^^^^^^^^^^^
++ :download:`ptc999_to_man_ori_377.m.txt <../add_docs/projects/ptc999_to_man_ori_377.m.txt>`
++ :download:`cam1.tif_.ori_.txt <../add_docs/projects/cam1.tif_.ori_.txt>`
++ :download:`cam2.tif_.ori_.txt <../add_docs/projects/cam2.tif_.ori_.txt>`
+
+`Back to top <http://www.openptv.net/docs/projects.html>`_
+	
+test case from Wesleyan University 
+-----------------------------
+Result of our software tracking of the data posted by Greg Voth, Wesleyan University
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The data is posted on http://gvoth.web.wesleyan.edu/PTV/Wes_data.htm
+
+After some transformations (the detailed instructions will be posted soon), Alex got this: 
+
+|image1|
+
+There are 310 trajectories of various length, few longest are 200 frames (full run) long: 
+
+|image2|
+
+some e-mail that should be converted into the website
+
+1.The data is Wesleyan data.
+2.The software is 3D-PTV software, v1.02 (I installed the batteries-included-version http://ptv.origo.ethz.ch/wiki/Windows_Installer_Package)
+3.All the changes were performed in the /test subfolder of this installation in order to be sure that the same parameters are set up. (parameters.zip is attached).  
+
++ our coordinate system is different and it's not flexible, so I had to change it to:
+	- x -> z, y -> x, z -> y
++ renamed image files to the format of  cam1.10001 - cam4.10200(I added 10000 for the convenience, I never sure about 0xxx format of the extension)
++ renamed calibration images
+	- av_calib1_edit -> cam1.tif 
++ We use 'negative' images, i.e. white dots on dark background. some matlab trick is attached ::
+
+     our coordinate system is different and it's not flexible, so I had to change it to:
+        x -> z, y -> x, z -> y
+    renamed image files to the format of  cam1.10001 - cam4.10200(I added 10000 for the convenience, I never sure about 0xxx format of the extension)
+    renamed calibration images
+        av_calib1_edit -> cam1.tif 
+    We use 'negative' images, i.e. white dots on dark background. some matlab trick is attached 
+
++ created orientation files. first version was simply the copy of the information from Wes_data.htm, e.g. for camera 1::
+
+    650.0 70.0 650.0 <-- x,y,z camera position
+    0.2 0.0 0.0      <-- angles, 0.2 rad looking d
+    0 1 0
+    0 0 1
+     
+    0.0 0.0       &nownwards
+    1 0 0 
+    bsp; <--- xp,yp, default
+    100.0           <--- focal distance, unknown parameter
+    500.0 0.0001 500.0 <--- interface, perpendicular to the camera, radius of the tank
+
++ the attached *.ori files are already after static (using the calibration plate) and dynamic calibration ("shaking").
++ created  calblock.txt file that numbers the points on the calibration plate from 1 to 100, such that::
+
+    1 ... 9
+    .......
+    91 .. 100
+
+top left is 1 and top right is 9, bottom left is 91 and bottom right is 100. the origin is point 95. 
+
++ changed the Main Parameters to have 10 mm glass and images of the 1280 x 1024 pixels. I didn't know the pixel size, changed it to 10 micron (should not be a big problem on average) and I do not know how much it affects the final results.
++ using manual tagging of points 1,9,91,100 and few iterations, the data was pretty well calibrated, due to large distance from the calibration plane, the numbers are below 1 micron accuracy.
++ added dynamic calibration using first 50 frames. the parameters folder is zipped and attached.
++ standard run of the 3D-PTV software (v1.02, from the standalone installation, see origo) with sequence/tracking and tracking backwards created the data which is attached in wes_data.zip. The files were converted from _targets files to the cam1,2,3,4_2D.dat using our Matlab subroutine (attached, et_targets_to_bench2D_format).
++ the branch of our post_processing software (see on origo) that is called bench_3D_output creates the text file (inside the wes_data.zip) called wes_bench3d.txt. the format is as it was before: x,y,z,frameId,trajID 
+
+Hopefully, everyone can now re-run it with the same settings to get the same/close result. If possible, someone has to repeat the steps (now it's easier) and type a tutorial of how to use Wesleyan data in 3D-PTV software. Since it's a nice one-plane calibration that evolves as a dynamic calibration is added - we could consider this case as a nice tutorial for the 3D-PTV users. we can also test various dynamic calibrator algorithms on this case, as a part of the post-benchmark collaboration. 
+
+`Back to top <http://www.openptv.net/docs/projects.html>`_
+
+Ongoing ETH and TAU projects
+=============================
+
+Agglomerate breakage in turbulence
+------------------------------
+Introduction
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Lagrangian Particle Tracking of Aggregate Breakage by 3D-PTV : A brief project description**
+
+We propose to experimentally investigate the breakup mechanism of colloids in turbulent flows. The main experimental tool is `three dimensional particle tracking velocimetry (3D-PTV) <http://www.openptv.net/docs/intro.html>`_, a whole field non intrusive flow diagnostic technique, applied to turbulent flow of water and suspended colloids.Colloids are constellations of tiny particles on the order of micron scale. Aggregation and breakage of colloids are quite prevalent phenomena in a variety of flows spanning from industrial processes such as crystallization, separation and reaction in multi phase systems to environmental flows like bio geochemical cycle of marine colloid and transport of toxic elements. Another prominent example of colloidal suspensions is aerosols. Aggregation and breakage of colloids are key to understanding of processes occurring in different flow domains.
+
+Detailed knowledge of the turbulent flow field around a colloid prone to break is indispensable to comprehend the breakage dynamics. Therefore, it is absolutely vital to have thorough access to the properties of the turbulent flow in the close proximity of the colloid before, during and after its breakage. This necessitates to gain the full fledged Lagrangian statistics of the flow field and of the colloid motion. This demand for simultaneous measurement of the turbulent flow features and tracking the colloid not only as a single entity but also together with the produced fragments asks the experimental tool to be capable of pursuing the particles along its Lagrangian trajectory and at the same time to provide the full information about velocity gradients in its vicinity. Therefore in this proposed work we intend to further advance our knowledge to clarify the interaction between the turbulent flow field and aggregate breakage by spatiotemporal breakage detection with improved accuracy and adapt the existing 3D-PTV algorithm accordingly.
+
+Since disaggregation of colloids due to turbulence is in the main focus, we need to bridge the expertise on chemical and mechanical aspects of the colloids (primary particle size, surfactant, destabilizer concentration, aggregation mode etc.) with the experimental turbulence. We receive constant feedback from another ETH institute namely Institute for Chemical and Bioengineering as they have adequate experience of colloid aggregation and breakage in different flow environment. We would like to constantly verify breakage as detected from our main work horse 3D-PTV with the small angle static light scattering (SASLS) technique extensively used by our collaborator. It will advance our knowledge of colloid breakage, which is absolutely necessary, e.g., for modeling, design, and manufacturing of next generation industrial mixers. From the basic point of view the understanding of colloid breakage is closely related to the field of passive objects such as material lines and surfaces, fluid particles and the evolution of multi-point constellations in turbulent flows.
+
+It is our goal to measure velocity gradients around breaking colloids with 3D-PTV in increasingly more realistic flow environments, i.e. towards industrial stirring and mixing vessels. We will start with a relatively simple situation of a contracting duct and then gradually increase the complexity of the flow field. Milestones of the proposed project are: Measure simultaneously velocity gradients and breakage with 3D-PTV in orifice, identify Lagrangian velocity gradient breakage criteria in isotropic turbulence and as a bonus milestone provide benchmark data for CFD (Computational fluid dynamics) simulation of breakage in LTC (Lobbed Taylor Couette) unit.
+
+
+The highlights of our proposed research plan can be presented as follows: We want to combine IfU's Lagrangian measuring technique 3D-PTV with the experience and equipment of the Morbidelli group in colloidal engineering and thereby obtain detailed Lagrangian experimental data on colloidal breakage. We start with a relatively simple experiment in an orifice, measure Lagrangian information about breakage, approach the breakage problem in a more realistic turbulent flow, and finally measure in an industry relevant stirring apparatus, the patented, lobbed Taylor Couette facility. It is all about identifying precisely what flow situations and Lagrangian flow histories results in breakage of colloids. The following sections will sequentially unfold the scheme of the research program. 
+
+Optical instrumentation 
+^^^^^^^^^^^^
+**Four view image splitter** (**See New Optical Image Spiltter Section**)
+
+**Troulbe shooting the laser**
+
+Light source is the hardware backbone of the 3D-PTV experiment. Sporadic problem of shutting down the laser during an experiment and/or malfunctioning from the very beginning inspire one to unveil the problem and fix the error. 
+
+|image33|
+
+Frequently encountered problems include when flow rate is inadequate,cover interlock and auxiliary interlock are open.
+
+Specifically what triggers the laser shut down can be figured out from the Interlock STATUS indicators warning displayed on the Remote Control Module shown below. 
+
+|image34|
+
+Here is the pictorial demonstration that will guide one to address the problem and the way to solve it. 
+
+*Flow indicator is on*
+
+|image35|
+|image36|
+|image37|
+|image38|
+|image39|
+|image40|
+|image41|
+|image42|
+|image43|
+|image44|
+
+Here one point is worth mentioning regarding the yellow key. This key has to be carefully press down and then twist in a fashion such that it acts as a proxy cover interlock switch in the laser head. 
+
+The last picture in the image matrix above makes the laser fully naked and its time to find out a tiny little screw in a horde of electronic circuits. 
+
+|image45|
+|image46|
+|image47|
+|image48|
+
+The figures above are taken from slightly different angle trying to throw light on the very little part of interest where the desired screw is staying. The screw is almost obscure but one easy way to detect it is to focus on the warranty seal where it is written "WARRANTY VOID IF THE SEAL IS BROKEN" with Spectra Physics trademark. Here is the magnified view for better observation. 
+
+|image49|
+
+After learning where the screw is,one has to gently move the screw head anti clockwise and about half a rotation. 
+
+|image50|
+|image51|
+
+That should eventually switch off the glow of the flow indicator on the control module and make the laser ready to shoot. 
+
+*Cover indicator is on*
+
+Cover indicator glows when the cover interlock switch in the laser head or power supply is on and one can heal the problem by opening the small window on the big hatch on the far left side where BeamLok is marked on it. This window should close down in such a way that the extruded part from it comes down pushes the black button properly. (One can remember that yellow key did the same job while discussing the flow indicator problem) 
+
+|image52|
+|image53|
+|image54|
+|image55|
+
+*Auxiliary indicator is on*
+
+Auxiliary indicator glows when the auxiliary interlock circuit is open. The auxiliary interlock connector (AUX INTLK) is located on the connector panel of the power supply. Often this AUX indicator also glows if the cable on the cooler is displaced/disturbed due to careless movement near the cooler. Taking out the cable or tighten it a bit can help to solve the problem. 
+
+|image56|
+|image57|
+|image58|
+
+Result bin
+^^^^^^^^^^^^
+Particle detection issue attacked with Matlab image processing approach
+^^^^^^^^^^^^
+**Image segmentation using Matlab - search for breakage **
+
+Here is the Image Processing approach to the colloid breakage identification. The test case is take from the Terradisk, Beat_Colloid folder. The main tools are very well explained on the Mathworks blog: http://blogs.mathworks.com/steve/2006/06/02/cell-segmentation/.
+
+This is by no means the final solution, but rather a demo of the approach that I can propose. The idea is that image is segmented into 'complex shape particles' using image processing subroutines. This allows to extract the boundaries using the grey level thresholding and, in addition, to see if there are one or two (or many) 'bright islands' within that boundary.
+
+The code is zipped in the file, segmentation_of_breakage.zip and in the subroutine colloid_image_segmentation_inpoly. These files allow for proper identification of the single-image-breakage-event, i.e. the point at which the single particle becomes two-hill particle. However, for obvious reasons, this doesn't mean that all the cameras (illumination, view angle effects, etc.) will see the "same" event at the same frame. The main problem is that even I do not know how to define properly breakage in 2D using 4 cameras. The missing step is use the output, feed it back into image-to-3D-space routine in PTV software and get 3D positions of the particles. Maybe then the discrepancies between the four camera images will be found. 
+
+|image3|
+
+From Beat:
+I continued along the lines of Steve and Alex an have now a matlab script that watersheds the 2d particles pretty reliable and that detects the border of possible actually connected points. From here - or something similar - it should be relatively straight forward to produce target files or some suitable connection to the 3D-PTV code. 
+
+|image4|
+
+Filtered image and perimeters of potential particles framed with gree
+
+|image5|
+
+The -sofar- final result. Each cell, one color, black dot is center of gravity, white lines are borders of cells, and eventual black lines are common borders of cells.
+
+**Attachment**
+
++ :download:`segmentation_of_breakage.zip <../add_docs/projects/segmentation_of_breakage.zip>`
++ :download:`2d_recognition_continued.m.txt <../add_docs/projects/2d_recognition_continued.m.txt>`
+
+Movie clip
+^^^^^^^^^^^^
+
+`Breakage: Frame number: 19700-19790 <https://www.youtube.com/watch?v=GQqcIBtRhJ0>`_
+
+Presentation
+^^^^^^^^^^^^ 
+
+`Back to top <http://www.openptv.net/docs/projects.html>`_
+
+Experimental analysis of aortic flow in human aorta
+------------------------------
+Project Description
+^^^^^^^^^^^^^^^^^
+
+|image6|
+The aorta and its branches (Gray, 1918)
+
+The aorta is the largest artery leaving the heart. Under normal conditions the flow is claimed to be laminar, but it may also become turbulent. Turbulence and the associated increased shear stress are believed to be associated mostly with pathological blood flow phenomena. Although in the last decades there have been many scientific investigations on the flow characteristics in a human aorta, it is still unknown whether and under what circumstances aortic flow becomes turbulent. Despite numerous studies investigating individual aspects for laminar/turbulent flow transition, to date their interplay at realistic flow conditions is still poorly understood. Therefore in this thesis work relevant flow parameters will systematically be varied and the resulting flow patterns and flow states will be studied. In particular it will be asked: What are the local causes for transition? What regions become turbulent? What are the properties of turbulence in these regions? Are transition and geometry related, due to flow separation, or is free shear flow in the middle of the vessel mainly responsible? In special regions of interest the field of velocity derivatives will be investigated, including the fields of vorticity and strain that are responsible for dissipating the kinetic energy of the flow.
+
+Up to recently, there was no non-intrusive whole field experimental access to particle trajectories, velocities, velocity fluctuations and velocity derivatives in turbulent flows. With the recent development of PTV, it is possible to identify and analyze turbulent flow regions accurately and on the necessary level of detail. The flow will be first adjusted to closely mimic in-vivo flow conditions as obtained from MRI measurements. The accuracy of the MRI velocities will be assessed by comparing with PTV measurements of the same flow in the same setup. Parameters of a ‘healthy patient reference flow’ and an ‘unhealthy patient reference flow’ will be varied systematically to investigate their influence on laminar turbulent transition. Milestones of our project are: (i) Setup of in-vitro PTV experiment in an aorta replica to match in-vivo flow conditions. (ii) Understand the conditions that lead to transition in aortic flow. (iii) Quantify flow properties in regions before, during and after transition. The expected outcome has technical, engineering and fundamental aspects: The quality of MRI velocity measurements will be assessed. Detailed velocity information will produce benchmark data for computational fluid dynamics codes that are used in industry. The understanding of the flow phenomenon transition will be advanced.
+
+To summarize, in this project, the main aim is to advance the hydrodynamic understanding of aortic flows. To achieve this, transition from laminar to turbulent flow in an elastic and transparent anatomically accurate replica of a human aorta is analyzed. The inflow conditions are taken from in-vivo magnetic resonance imaging (MRI) measurements, in order for them to be as realistic as possible. Particle Imaging Velocimetry (PIV) and 3D Particle Tracking Velocimetry (3D-PTV), two image-based non intrusive measurement techniques are applied to a pathological and healthy human aorta replicas.
+
+Dumbbell Calibration
+^^^^^^^^^^^^^^^^^^^^^^
+Calibration is the heart of the 3D-PTV. Therefore, having a better calibration will lead a better solution. There are two ways to calibrate the cameras. One can use traditional calibration (target block calibration) for which a three dimensional calibration target is required. The basic idea is to use a reference object with known coordinates. The calibration target should be seen by four cameras. 
+
+|image7|
+
+The other possibility is to use dumbbell calibration. In some applications, it is not feasible to use a calibration target inside or outside the investigation domain as a result of lack of space. The main idea is to move two points, with a fixed distance and known diameter, around the investigation domain. This movement will provide a 3D domain. As long as the points are seen by four cameras for all time instances, initial guesses converge. If the quality of the recordings is good enough, software will find two correspondences per image which are the points of dumbbell. Afterward calibration optimizes the distances by which the epipolar lines miss each other while maintaining the detected distance of the dumbbell points.
+
+Here is an example of a dumbbell calibration: 
+
+|image8|
+
+During the experiments, image splitter and four mirrors are used to mimic four virtual cameras. For a detailed preview, please check (http://ptv.origo.ethz.ch/wiki/four_view_image_splitter_3d_ptv). The investigation domain is the ascending aorta replica which has a diameter of 20 mm. The index of refraction is matched to avoid the noises. 
+
+|image9|
+
+Firstly, dumbbell is moved behind the aorta. Then, it is moved in front of the aorta. All movements are recorded in 5000fps. The images are combined with a time step of 0.0176 s. It means that there are 62 time instances for dumbbell calibration. 
+
+|image10|
+
+The pre-calibration parameters and initial guesses are quite important to reach better results faster. For a rough initial guess, it will take some time to converge. The better initial guess, the less convergence time. Since it starts converging, the software will find two correspondences. 
+
+|image11|
+|image12|
+
+Dumbbell parameters will help to find the optimum eps values. One can start with a coarser numbers, then switch them into finer ones. After a certain number of iterations, the software converges. At this point, the quality of the result is related to user's satisfactory. If the rms values are not good enough, one can go for a finer gradient descent factor and dumbbell penalty weight. 
+
+|image13|
+
+There is a small trick to go beyond converged numbers. One can apply shaking to the best initial guesses. Shaking improves the result. It helps to reduce error below 10 microns. But in any case one should back up ori files. Because sometimes it crashes!!! 
+
+|image14|
+|image15|
+
+Now, you have a dynamic calibration by using dumbbell. Here are the plots of dumbbell tracking.
+
+|image16|
+|image17|
+
+Experiments and Results
+^^^^^^^^^^^^^^^^^^^^^^
+
+|image18|
+
+2d-PIV Flow Filed
+
+|image19|
+
+Experimental Setup
+
+|image20|
+
+3D-PTV Flow Field
+
+|image21|
+
+Experimental Setup
+
+|image22|
+
+Pulse Shape
+
+|image23|
+
+Experimental Setup
+
+Video files
+^^^^^^^^^^^^^^^^
+`Healthy aortic replica <https://www.youtube.com/watch?v=FIWEphErMEs>`_
+
+`aorta replica with aneurysm <https://www.youtube.com/watch?v=JpcIAj1ADPE>`_
+
+Presentation 
+^^^^^^^^^^^^^^^^
+
+`Back to top <http://www.openptv.net/docs/projects.html>`_
+
+Experimental study of turbulent entrainment in swirling jet
+------------------------------
+
+`Back to top <http://www.openptv.net/docs/projects.html>`_
+
+Four-view image splitter for single-camera-3D-PTV projects
+------------------------------
+Project description
+^^^^^^^^^^^^^^^^^^^
+
+Establishment of stereoscopic imaging is the vital part amid settling other optical pieces for an experiment based on 3D-PTV. Two cameras are enough for stereoscopic focusing but four provides a welcome redundancy albeit not cost effective. A smart technique that spares the expense for the costly camera is to use image splitter having a shape of the pyramid. Instead of having four cameras, four mirrors assume the virtual camera role. Annexed figure here illustrates the idea. 
+
+|image24|
+
+There exists no such a priori to set mirrors and stuffs and it could be enigmatic enough that someone may stress to have a hard and fast rule based on empirical observation. But pros and cons of the positioning of the individual optical tool with respect to the position of the setup itself is a function of the area to be focused. In this orifice experiment, observation area is approximately 20X 24 mm.
+
+Proper magnification covering the observation domain accompanied by clean and equal focus from all four mirrors may lead to emerge overlapping problem of the images with each other. Here overlapping refers the blending of an image projected from one arbitrary mirror on to the image splitter with either its horizontal or vertical counterpart (or even in both direction). So mutual overlap from all four mirrors at the same time actually spoils the view of the flow domain as one particular image is interfered by the extent of other three images reflecting some extent of the flow and undesirably laying on to it.
+
+What attributes most to this intricate issue of image overlap is the relative distance of the mirrors from the image splitter. Overlap in both direction can be effectively minimized (in some cases eliminated even) if the mirrors are placed away from the pyramid. Then obviously the mirror reflects the unnecessary parts of the flow geometry (where there is no flow, i.e., solid part) producing poor zoom in. This imposes the challenge to find an optimal position by continuously moving the mirror towards the pyramid up to the point where magnification and focus are satisfactory with non upsetting overlap. Here, one may define the non upsetting overlap as the extent of critical overlap from a mirror that stretches out (horizontally or vertically) but does not dilate so far to ruin the neighboring image; i.e., this overlap lays itself onto the solid part of the adjacent image causing no harm to flow visualization out there. This degree of overlap is tolerable as it does not necessitate masking the mirror. If higher magnification is on demand (as it was the case for orifice setup) then the mirror should come as close as possible to the pyramid making not only the whole arrangement quite congested but also allowing the previously innocent part of the overlap from the next mirror to grow and eventually swallow the image under scrutiny. So the definition of optimal position of the mirror does not always necessarily provide good enough magnification. Since at this point, magnification can not be compromised; the only measure left to eliminate the overlapping problem is to create a suitable mask on the mirror to make it appropriately partial blind. This task is sensitive to minute geometric precision of both mirror and pyramid surface and appeared to be painstakingly monotonic.
+
+Once the whole optical setup gets ready to go certificate, it should remain untouched because the linear distances can be measured and saved but the angle of the mirrors on to the stand is difficult to measure and therefore to reproduce the system once again is close to nightmare.
+
+Strictly speaking, this description surfaces from the experience out of orifice experiment and may get new face for another type of experimental effort. 
+
+**As it happens in the laboratory**
+At the very beginning mirrors were tuned under low laser illumination for safety reason as it takes quite a while to get the right perspective. In this preliminary tuning stage the operating parameters were as such: camera frequency-50 FPS,laser-16 amp,camera aperture-16 and the consequent output is seen in the following figure. 
+
+|image25|
+
+In this arrangement,mirrors were placed so close to the camera objective (in order to achieve maximum magnification possible only on the zone of interest) that mirror clamps were almost brushing the lens. This became obvious as illumination is increased (but not full).A black part is seen engulfing every quarter of the image leaving the channel (and/or flow domain) obscure. This unwanted black part onto every images arose due to the intimate placement of the mirror to the camera which caused mirrors to reflect objective surface and overwhelm the image all over.
+
+|image26|
+
+So mirrors were dragged away to produce undisturbed image as seen here. 
+
+|image27|
+
+Up to this point, all the distances and angular position of the mirror are assumed to be the best possible set and subject to leave as it is. From this figure we can infer something about orientation of the mirrors and the much anticipated overlap.
+
+A closer look on the two screws seen at the bottom mirrors gives the evidence of almost identical inclination of those mirrors as it is also the case for the upper two.
+
+The bottom quarter of the images certainly intrudes to each other by their edge but definitely do not reach out to the important flow regime. This two images are also swept over vertically by a narrow margin from the upper quarter but again that extent of vertical overlap does not hamper the channel view all the way. This particular figure exemplifies the concept of optimal image overlap that does not require any external mask on the mirror but with an expense of relatively lower zoom in.
+
+
+After these time consuming adjustments,its time to examine the setup under desired operating conditions, i.e., full laser illumination as well as required temporal resolution(2000 FPS for this experiment).Even at full laser power, image seen at 2000 frame/sec at aperture 16 is quite dim and henceforth it was bound to tune low aperture number allowing more light to come through. 
+
+|image28|
+
+Lower aperture allows not only more light but also enhances reflection from the surface. This is evident in figures below. Camera aperture was 5 and 2.8 in the figure left and right respectively. 
+
+|image29|
+
+At this point one can now fiddle around with the camera option like “color adjustment” including parameters such as gain,gamma,contrast and brightness together with the “Additional feature” that facilitates to shift the bit. 
+
+|image30|
+
+After careful manipulation the final image appeared as in figure. 
+
+|image31|
+
+This is only a quick and dirty explication about what are the major challenges on the way to derive a clear image in accordance with demands in hand and how to prevail over those problems. Although detrimental reflections stand still in this orifice experiment which is quite stubborn and a way to get rid of the reflection is a must. 
+
+
+New Optical Image Splitter
+^^^^^^^^^^^^^^^^^^^
+**Optical Image Splitter**
+
+*What is it?*
+
+An optical image spitter system splits the camera view into several sub views, typically we use four. These sub views each have different viewing angles onto the observation domain. This results in several virtual viewing points, thus allowing for stereoscopic imaging with just one single camera.
+Optical Image Splitter
+
+*Why use it?*
+
+Sometimes you either do not have the money to spend on several cameras, or you do not have the space to squeeze four 5kg cameras in front of your tiny flow setup. Then it is time to use an image splitter system like it is used in IfU at ETH Zurich, in the `Turbulence Structure Laboratory in Tel Aviv University <http://www.eng.tau.ac.il/turbulencelab/>`_, or in the `St. Anthony Falls Laboratories <http://www.safl.umn.edu/researchgroup/michele-guala>`_ , University of Minnesota.
+
+|image32|
+
+*How much does it cost?*
+
+Of the shelf a complete system can be purchased via `photrack Ltd <http://www.photrack.ch/>`_ for the price of separate parts, integration and transport. The mirror setup is shown and you can order the parts on your own, directly from Linos, and likely slightly cheaper. The pyramid drawings are also available from `photrack Ltd <http://www.photrack.ch/>`_. The `software <http://www.openptv.net/docs/>`_ will require some adaptations and fine tuning that are available from the same source. 
+
+`Back to top <http://www.openptv.net/docs/projects.html>`_
+
+Past projects
+==============================
++ Velocity derivatives in turbulent flow from 3D-PTV measurements
++ JET growth motion in aerosols module observed under micro-gravity conditions on the sounding rocket MASER 8
++ Anaglyph display of a portion of a velocity field determined by 3-D PTV (use red/blue glasses for stereo-viewing)
++ Study on the applicability of 3-D PTV to surface tension driven convection (Marangoni convection) 
+
+`Back to top <http://www.openptv.net/docs/projects.html>`_
+
+Joined project with ESA-ESTEC and Alenia Aerospazio
+==============================
+
++ Study on the applicability of 3-D PTV for measurements in liquid columns (joined project with ESA-ESTEC and Alenia Aerospazio)
++ 2-D projection of a 3-D trajectory field in a vortex measured with 3-D PTV
+
+`Back to top <http://www.openptv.net/docs/projects.html>`_
+
+
+.. |image0| image:: ../images/projects_1.jpg
+.. |image1| image:: ../images/projects_2.jpg
+.. |image2| image:: ../images/projects_3.jpg
+.. |image3| image:: ../images/projects_4.jpg
+.. |image4| image:: ../images/projects_5.jpg
+.. |image5| image:: ../images/projects_6.jpg
+.. |image6| image:: ../images/projects_7.jpg
+.. |image7| image:: ../images/projects_8.jpg
+.. |image8| image:: ../images/projects_9.jpg
+.. |image9| image:: ../images/projects_10.jpg
+.. |image10| image:: ../images/projects_11.jpg
+.. |image11| image:: ../images/projects_12.jpg
+.. |image12| image:: ../images/projects_13.jpg
+.. |image13| image:: ../images/projects_14.jpg
+.. |image14| image:: ../images/projects_15.jpg
+.. |image15| image:: ../images/projects_16.jpg
+.. |image16| image:: ../images/projects_17.jpg
+.. |image17| image:: ../images/projects_18.jpg
+.. |image18| image:: ../images/projects_19.jpg
+.. |image19| image:: ../images/projects_20.jpg
+.. |image20| image:: ../images/projects_21.jpg
+.. |image21| image:: ../images/projects_22.jpg
+.. |image22| image:: ../images/projects_23.jpg
+.. |image23| image:: ../images/projects_24.jpg
+.. |image24| image:: ../images/projects_25.jpg
+.. |image25| image:: ../images/projects_26.jpg
+.. |image26| image:: ../images/projects_27.jpg
+.. |image27| image:: ../images/projects_28.jpg
+.. |image28| image:: ../images/projects_29.jpg
+.. |image29| image:: ../images/projects_30.jpg
+.. |image30| image:: ../images/projects_31.jpg
+.. |image31| image:: ../images/projects_32.jpg
+.. |image32| image:: ../images/projects_33.jpg
+.. |image33| image:: ../images/projects_34.jpg
+.. |image34| image:: ../images/projects_35.jpg
+.. |image35| image:: ../images/projects_36.jpg
+.. |image36| image:: ../images/projects_37.jpg
+.. |image37| image:: ../images/projects_38.jpg
+.. |image38| image:: ../images/projects_39.jpg
+.. |image39| image:: ../images/projects_40.jpg
+.. |image40| image:: ../images/projects_41.jpg
+.. |image41| image:: ../images/projects_42.jpg
+.. |image42| image:: ../images/projects_43.jpg
+.. |image43| image:: ../images/projects_44.jpg
+.. |image44| image:: ../images/projects_45.jpg
+.. |image45| image:: ../images/projects_46.jpg
+.. |image46| image:: ../images/projects_47.jpg
+.. |image47| image:: ../images/projects_48.jpg
+.. |image48| image:: ../images/projects_49.jpg
+.. |image49| image:: ../images/projects_50.jpg
+.. |image50| image:: ../images/projects_51.jpg
+.. |image51| image:: ../images/projects_52.jpg
+.. |image52| image:: ../images/projects_53.jpg
+.. |image53| image:: ../images/projects_54.jpg
+.. |image54| image:: ../images/projects_55.jpg
+.. |image55| image:: ../images/projects_56.jpg
+.. |image56| image:: ../images/projects_57.jpg
+.. |image57| image:: ../images/projects_58.jpg
+.. |image58| image:: ../images/projects_59.jpg
