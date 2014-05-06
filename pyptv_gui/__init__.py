@@ -5,5 +5,7 @@ based on Python/Enthought Traits GUI/Numpy/Chaco
 
 """
 
+__all__ = ["pyptv_batch", "parameters", "parameters_gui"]
+
 import os, sys
 sys.path.append(os.path.abspath('../src_c'))

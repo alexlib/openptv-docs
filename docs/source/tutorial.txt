@@ -15,8 +15,8 @@ If you want to practice, install the software and **download** the necessary fil
 
 
 
-Calibratoin
-----------------
+Calibration tutorial
+--------------------
 
 
 New experiment:
@@ -288,6 +288,12 @@ enhanced method. To derive a velocity field from the observed flow.
 	#. Tracking, show Trajectories displays the reconstructed trajectories in all image display windows.
 
  |image18|
+ 
+.. toctree::
+   :maxdepth: 2
+   
+   splitter
+   dumbbell_calibration
 
 .. |image0| image:: ../images/fig1.png
 .. |image1| image:: ../images/fig2.png

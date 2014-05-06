@@ -24,6 +24,9 @@ Contents:
    add_doc
    add_soft
    gui_doc
+   downloads_page
+
+   
 
    
 API:
@@ -31,9 +34,6 @@ API:
 .. toctree::
    :maxdepth: 2
 
-   code
-   api_reference
-   downloads_page
    
 
    

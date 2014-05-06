@@ -4,60 +4,63 @@
 
 
 Introduction
-^^^^^^^^^^^^^^^^^^^^^^^^^
-WG1 meeting in Zurich (August 2009) concluded that the three-dimensional particle tracking velocimetry (3D-PTV) is one of the established experimental approaches in the field of Particles in Turbulence. As a consequence, many algorithms, software packages have been developed over years by various research groups worldwide. This action is an attempt to learn best practices from each and to develop the open source particle tracking velocimetry that will combine the know-how of all the involved parties.
+------------
 
-The first step, proposed during that meeting, was to develop few test cases that different research groups can use to test their own algorithms and software. The report of the groups will help to identify those performing best at different stages of the analysis and to expose the best practices to the other members of the action. There is a single important condition - open science. The codes, algorithms, data should be open to all the members of the action. The main goal is to make particle tracking better and accessible. 
+During the meeting in Zurich in August 2009 the working group concluded that the three-dimensional particle tracking velocimetry (3D-PTV) is one of the established experimental approaches in the field of Particles in Turbulence. As a consequence, many algorithms, software packages have been developed over years by various research groups worldwide. This action is an attempt to learn best practices from each and to develop the open source particle tracking velocimetry that will combine the know-how of all the involved parties.
+
+The first step, proposed during that meeting, was to develop *few test cases* that different research groups can use to test their own algorithms and software. The report of the groups will help to identify those performing best at different stages of the analysis and to expose the best practices to the other members of the action. There is a single important condition - open science. The codes, algorithms, data should be open to all the members of the action. The main goal is to make particle tracking better and accessible. 
 
 Test cases
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^
 At the moment there are few test cases available. These are of the two major types:
 
-1.Synthetic images - for the demonstration purposes, we use the Standard PIV Images project. Specifically, we use the 3D standard images: <http://www.piv.jp/image3d/image-e.html>.
+1. 	**Synthetic images** - for the demonstration purposes, we use the Standard PIV Images project. Specifically, we use the 3D standard images: http://www.piv.jp/image3d/image-e.html.
 
-2.Real experimental data 
+
+2. **Experimental dataset** 
 
 Synthetic images test cases
-^^^^^^^^^^^^^^^^^^^^^^^^^
-There are four cases on the Standard 3D Images website `[1] <http://www.piv.jp/image3d/image-e.html>`_ that seem to fit our purpose of testing the tracking software packages:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Transient 3D flow field from 3 angles with wall refrection
-    Case 351 (Jet Shear flow)
+There are four cases on the Standard 3D Images website `[1] <http://www.piv.jp/image3d/image-e.html>`_ that seem to fit our purpose of testing the tracking software packages::
 
-	+ Number of particles = 2000
-        + Camera calibration Images are imX999.raw 
+		Transient 3D flow field from 3 angles with wall refrection
+		Case 351 (Jet Shear flow)
 
-    (x,y,z) = (-0.8:0.0:0.8, -0.8:0.0:0.8, -0.8:0.0:0.8) 27 points
+		+ Number of particles = 2000
+			+ Camera calibration Images are imX999.raw 
 
-        + Three-cameras are on the holizontal plane 
+		(x,y,z) = (-0.8:0.0:0.8, -0.8:0.0:0.8, -0.8:0.0:0.8) 27 points
 
-    Case 352 (Jet Shear flow)
+			+ Three-cameras are on the holizontal plane 
 
-        + Number of particles = 300
-        + Camera calibration Images are imX999.raw 
+		Case 352 (Jet Shear flow)
 
-    (x,y,z) = (-0.8:0.0:0.8, -0.8:0.0:0.8, -0.8:0.0:0.8) 27 points
+			+ Number of particles = 300
+			+ Camera calibration Images are imX999.raw 
 
-        + Three-cameras are on the holizontal plane 
+		(x,y,z) = (-0.8:0.0:0.8, -0.8:0.0:0.8, -0.8:0.0:0.8) 27 points
 
-    Transient 3D flow field from 3 angles with unknown wall refrection
-    Case 371 (Jet Shear flow)
+			+ Three-cameras are on the holizontal plane 
 
-        + Number of particles = 500
-        + Camera calibration Images are imX999.raw 
+		Transient 3D flow field from 3 angles with unknown wall refrection
+		Case 371 (Jet Shear flow)
 
-    (x,y,z) = (-0.4:0.0:0.4, -0.4:0.0:0.4, -0.4:0.0:0.4) 27 points
+			+ Number of particles = 500
+			+ Camera calibration Images are imX999.raw 
 
-        + camera parameters are not known 
+		(x,y,z) = (-0.4:0.0:0.4, -0.4:0.0:0.4, -0.4:0.0:0.4) 27 points
 
-    Case 377 (Jet Impinging flow)
+			+ camera parameters are not known 
 
-        + Number of particles = 500
-        + Camera calibration Images are imX999.raw 
+		Case 377 (Jet Impinging flow)
 
-    (x,y,z) = (-0.2:0.0:0.2, -0.2:0.0:0.2, -0.2:0.0:0.2) 125 points
+			+ Number of particles = 500
+			+ Camera calibration Images are imX999.raw 
 
-        + cameras are set at the bottom of impinging plates 
+		(x,y,z) = (-0.2:0.0:0.2, -0.2:0.0:0.2, -0.2:0.0:0.2) 125 points
+
+			+ cameras are set at the bottom of impinging plates 
 
 
 As we see, we can process the various cases and compare our algorithms versus the
@@ -68,7 +71,8 @@ As we see, we can process the various cases and compare our algorithms versus th
 For example, comparing the case 352 and 371 will show if the effect of "known" vs "unknown" wall reflections on your camera model, comparing case 351 wit 352 will show the traceability parameter best, where the number of particles density is much higher in the "same" flow in case 351. 
 
 How to prepare and post the test case
-^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 For the demonstration purposes, we use the test case no 352: "Transient 3D flow field from 3 angles with wall refrection". We find that the way Standard PIV Images project defined the test cases is simple and comprehensible. We suggest to adopt this way of formatting your experimental data for the test case. Below we report the way 3D-PTV software (ETH Zurich) is used to analyze the case #352 and to report the results for further analysis. 
 
 General description
@@ -197,13 +201,14 @@ Thanks to the authors of the Standard 3D PIV Images: Dr. Okamoto (okamoto@tokai.
 `Back to top <http://www.openptv.net/docs/projects.html>`_
 
 PIV Standard Images test case 352
--------------------------
-Test case #352 PIV STD project
-^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Synthetic data were used to validate the algorithm. The synthetic data were from the PIV-STD library that was developed by the Visualization Society of Japan and served as the benchmark for many PIV/PTV research efforts (Okamoto et al 2000, Ruhnau et al 2005, Kim and Sung 2006). Data set 352 was chosen, which describes a jet flow impinging on a wall. The flow is transient and three dimensional. Data from Camera 0, frame 0–89 were adopted. At each frame, about 300 particles were in the observed region, which has a size of 256 by 256 pixels. The fluid motion was captured by three cameras. The particle spacing displacement ratio (PSDR), which is defined as the ratio of the average particle spacing to the mean particle displacement between two consecutive frames and serves as an important indicator to the difficulty of the tracking process (Malik et al 1993), is about 3.4 for thewhole image domain. However, compared to the left half of the images, the right half contained denser particles and larger particle displacement (see figures 4 and 5), which results in a lower PSDR. The PSDR is about 2.6 for the right half of the image domain and about 2.2 for the right quarter of the image domain. Such a small value makes it hard to track particles through 90 frames (Malik et al 1993). 
+We keep a mirror copy of the data for the case 352 on `case 352 copy <http://dl.dropbox.com/u/5266698/piv_std_352.tgz>`_
 
-[A multi-frame particle tracking algorithm robust against input noise, by Dongning Li, Yuanhui Zhang, Yigang Sun andWei Yan, Meas. Sci. Technol. 19 (2008) 105401 ]
+
+Synthetic data were used to validate the algorithm. The synthetic data were from the PIV-STD library that was developed by the Visualization Society of Japan and served as the benchmark for many PIV/PTV research efforts (Okamoto et al 2000, Ruhnau et al 2005, Kim and Sung 2006). Data set 352 was chosen, which describes a jet flow impinging on a wall. The flow is transient and three dimensional. Data from Camera 0, frame 0–89 were adopted. At each frame, about 300 particles were in the observed region, which has a size of 256 by 256 pixels. The fluid motion was captured by three cameras. The particle spacing displacement ratio (PSDR), which is defined as the ratio of the average particle spacing to the mean particle displacement between two consecutive frames and serves as an important indicator to the difficulty of the tracking process (Malik et al 1993), is about 3.4 for thewhole image domain. However, compared to the left half of the images, the right half contained denser particles and larger particle displacement (see figures 4 and 5), which results in a lower PSDR. The PSDR is about 2.6 for the right half of the image domain and about 2.2 for the right quarter of the image domain. Such a small value makes it hard to track particles through 90 frames (Malik et al 1993). 
+
+** A multi-frame particle tracking algorithm robust against input noise**, by Dongning Li, Yuanhui Zhang, Yigang Sun andWei Yan, Meas. Sci. Technol. 19 (2008) 105401
 
 3D-PTV software applied to the test case #352 (Standard PIV Images project)
 
@@ -215,7 +220,7 @@ Here we report the technical procedures, the results and the analysis of the cas
 2. Obtain 3D-PTV software from the website: http://www.openptv.net/docs/ (for Windows platforms, if no source is needed, the ZIP file below includes the executable, so it's plug-n-play ready test case) 
 
 
-Pre-processing procedure
+**Pre-processing procedure**
 
 Download the ZIP file with the directory ready for use with the software. Extract the file into the experiment directory, e.g. C:/PTV/test352
 
@@ -242,7 +247,7 @@ Basically, we convert the information provided for this test case into the calib
 
 This is precisely the same coordinate system as used by the 3D-PTV software. Therefore the conversion of the parameters is easy:
 
-in the /cal directory you'll find the *.ORI files for each camera. These consist of::
+in the `/cal` directory you'll find the `*.ORI` files for each camera. These consist of ::  
 
 	101.8263 -9.9019 65.1747 projective center X,Y,Z, [mm]
 	0.4151383 -0.0069793 1.5073263 omega, phi, kappa [rad]
@@ -332,17 +337,8 @@ Comparsion of results
 
 `Back to top <http://www.openptv.net/docs/projects.html>`_
 
-test case 371
--------------------------
-Introduction
-^^^^^^^^^^^^^^^^^^^^^^^^^
-Recent WG1 meeting in Zurich was our Experimental Workshop. It was roposed during that meeting that we develop few test cases that different research groups can use to test their own algorithms and software. The report of the groups will help to identify those performing best at different stages of the analysis and to expose the best practices to the other members of the action. There is a single important condition - open science. The codes, algorithms, data should be open to all the members of the action. The main goal is to make particle tracking better and accessible. 
-
-Benchmark proposal 1
-^^^^^^^^^^^^^^^^^^^^^^^^^
-We propose to start with the synthetic images, created from a known velocity field. Such images and data are available from the PIV Standard Images Project `[1] <http://www.piv.jp/image3d/image-e.html>`_. Here we describe the test case #377 (which is slightly more tricky due to an unknown wall reflection and camera positions).
-
-we keep a mirror copy of the data for the case 352 on `case 352 copy <http://dl.dropbox.com/u/5266698/piv_std_352.tgz>`_
+Test case 371
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 |image0|
 
@@ -498,17 +494,12 @@ Here we first copy the original description of the experimental conditions from 
     If you have any questions, please contact Dr. Okamoto
     (okamoto@tokai.t.u-tokyo.ac.jp)
 
-Prerequisties
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    1.3D-PTV software (it requires ActiveTCL 8.4.x)
-    2.post-processing software
-    3.Matlab (meanwhile, we're trying to move it all to Python/Numpy/Matplotlib)
 
 Download and prepare the test case
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.Download the images, point and vec files from the origional website using [2] .
+1.Download the images, point and vec files from the original website using [2] .
 2.Create 3D-PTV directory::
 
 	    C:/PTV/case377
@@ -518,16 +509,18 @@ Download and prepare the test case
      		            /parameters
 
 3. Convert RAW images into TIFF (8 bit) images using IrfanView (on Windows), ImageMagick or Matlab. The name convention is cam1.XXX cam2.XXX cam3.XXX (not .tif extension)
-4. Use the attached [3] Matlab file (remove .txt extension) to generate the calibration images and necessary ASCII files (see  >> help ptc999_to_man_ori_377 for more information).
+
+4. Use the attached [3] Matlab file (remove .txt extension) to generate the calibration images and necessary ASCII files (see  `>> help ptc999_to_man_ori_377` for more information).
+
 5.The orientation of the cameras turned to be quite tricky as the authors didn't mention the rotation around the imaging axis. Never mind, the ORI files are attached (remove .txt extension) . These could be significantly improved using iterative SHAKING algorithm of Beat.
 
 Sample run
-^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~
 
 If all the previous steps were successful, then running  start.bat will open the main window. From there, Start, then Tracking -> Sequence/Tracking will be the fastest way of checking it. At the end, Tracking -> Show trajectories should show something of the kind: 
 
 Prepare calibration
-^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~
 ::
 		
     function ptc999_to_man_ori_377(dir1,dir2,midplane)
@@ -659,17 +652,19 @@ Prepare calibration
     imwrite(bw,cam3,'tiff','compression','none')
 
 Attachment
-^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~
 + :download:`ptc999_to_man_ori_377.m.txt <../add_docs/projects/ptc999_to_man_ori_377.m.txt>`
 + :download:`cam1.tif_.ori_.txt <../add_docs/projects/cam1.tif_.ori_.txt>`
 + :download:`cam2.tif_.ori_.txt <../add_docs/projects/cam2.tif_.ori_.txt>`
 
 `Back to top <http://www.openptv.net/docs/projects.html>`_
 	
-test case from Wesleyan University 
------------------------------
-Result of our software tracking of the data posted by Greg Voth, Wesleyan University
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	
+Experimental dataset
+^^^^^^^^^^^^^^^^^^^^
+	
+Test case from Wesleyan University 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The data is posted on http://gvoth.web.wesleyan.edu/PTV/Wes_data.htm
 
@@ -714,7 +709,10 @@ some e-mail that should be converted into the website
     100.0           <--- focal distance, unknown parameter
     500.0 0.0001 500.0 <--- interface, perpendicular to the camera, radius of the tank
 
-+ the attached *.ori files are already after static (using the calibration plate) and dynamic calibration ("shaking").
+
+
++ the attached `*.ori` files are already after static (using the calibration plate) and dynamic calibration (`shaking`).
+
 + created  calblock.txt file that numbers the points on the calibration plate from 1 to 100, such that::
 
     1 ... 9
@@ -730,11 +728,6 @@ top left is 1 and top right is 9, bottom left is 91 and bottom right is 100. the
 + the branch of our post_processing software (see on origo) that is called bench_3D_output creates the text file (inside the wes_data.zip) called wes_bench3d.txt. the format is as it was before: x,y,z,frameId,trajID 
 
 Hopefully, everyone can now re-run it with the same settings to get the same/close result. If possible, someone has to repeat the steps (now it's easier) and type a tutorial of how to use Wesleyan data in 3D-PTV software. Since it's a nice one-plane calibration that evolves as a dynamic calibration is added - we could consider this case as a nice tutorial for the 3D-PTV users. we can also test various dynamic calibrator algorithms on this case, as a part of the post-benchmark collaboration. 
-
-`Back to top <http://www.openptv.net/docs/projects.html>`_
-
-
-
 
 
 
@@ -762,7 +755,6 @@ Hopefully, everyone can now re-run it with the same settings to get the same/clo
 .. |image21| image:: ../images/projects_22.jpg
 .. |image22| image:: ../images/projects_23.jpg
 .. |image23| image:: ../images/projects_24.jpg
-
 .. |image33| image:: ../images/projects_34.jpg
 .. |image34| image:: ../images/projects_35.jpg
 .. |image35| image:: ../images/projects_36.jpg
