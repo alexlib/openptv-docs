@@ -223,6 +223,8 @@ appropriate.
 In the upper toolbar choose : calibration and create calibration.
 choose orient with dumbbell.
 
+See also: :doc:`/dumbbell_calibration`
+
 #. Shaking calibration:
 
  |image11|

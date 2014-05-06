@@ -19,11 +19,12 @@ Contents:
    tutorial
    developers
    howto
-   gui_doc
+   benchmark
    projects
    add_doc
    add_soft
-   photrack
+   gui_doc
+
    
 API:
 

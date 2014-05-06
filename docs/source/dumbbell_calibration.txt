@@ -1,0 +1,54 @@
+Dumbbell Calibration
+====================
+
+
+Calibration is the heart of the 3D-PTV. Therefore, having a better calibration will lead a better solution. There are two ways to calibrate the cameras. One can use traditional calibration (target block calibration) for which a three dimensional calibration target is required. The basic idea is to use a reference object with known coordinates. The calibration target should be seen by four cameras. 
+
+|image7|
+
+The other possibility is to use dumbbell calibration. In some applications, it is not feasible to use a calibration target inside or outside the investigation domain as a result of lack of space. The main idea is to move two points, with a fixed distance and known diameter, around the investigation domain. This movement will provide a 3D domain. As long as the points are seen by four cameras for all time instances, initial guesses converge. If the quality of the recordings is good enough, software will find two correspondences per image which are the points of dumbbell. Afterward calibration optimizes the distances by which the epipolar lines miss each other while maintaining the detected distance of the dumbbell points.
+
+Here is an example of a dumbbell calibration: 
+
+|image8|
+
+During the experiments, image splitter and four mirrors are used to mimic four virtual cameras. For a detailed preview, please check (http://ptv.origo.ethz.ch/wiki/four_view_image_splitter_3d_ptv). The investigation domain is the ascending aorta replica which has a diameter of 20 mm. The index of refraction is matched to avoid the noises. 
+
+|image9|
+
+Firstly, dumbbell is moved behind the aorta. Then, it is moved in front of the aorta. All movements are recorded in 5000fps. The images are combined with a time step of 0.0176 s. It means that there are 62 time instances for dumbbell calibration. 
+
+|image10|
+
+The pre-calibration parameters and initial guesses are quite important to reach better results faster. For a rough initial guess, it will take some time to converge. The better initial guess, the less convergence time. Since it starts converging, the software will find two correspondences. 
+
+|image11|
+|image12|
+
+Dumbbell parameters will help to find the optimum eps values. One can start with a coarser numbers, then switch them into finer ones. After a certain number of iterations, the software converges. At this point, the quality of the result is related to user's satisfactory. If the rms values are not good enough, one can go for a finer gradient descent factor and dumbbell penalty weight. 
+
+|image13|
+
+There is a small trick to go beyond converged numbers. One can apply shaking to the best initial guesses. Shaking improves the result. It helps to reduce error below 10 microns. But in any case one should back up ori files. Because sometimes it crashes!!! 
+
+|image14|
+|image15|
+
+Now, you have a dynamic calibration by using dumbbell. Here are the plots of dumbbell tracking.
+
+|image16|
+|image17|
+
+
+
+.. |image7| image:: ../images/projects_8.jpg
+.. |image8| image:: ../images/projects_9.jpg
+.. |image9| image:: ../images/projects_10.jpg
+.. |image10| image:: ../images/projects_11.jpg
+.. |image11| image:: ../images/projects_12.jpg
+.. |image12| image:: ../images/projects_13.jpg
+.. |image13| image:: ../images/projects_14.jpg
+.. |image14| image:: ../images/projects_15.jpg
+.. |image15| image:: ../images/projects_16.jpg
+.. |image16| image:: ../images/projects_17.jpg
+.. |image17| image:: ../images/projects_18.jpg
