@@ -1,0 +1,37 @@
+Post Processing
+====================
+
+PostPTV
+^^^^^^^^^^^^^^^^^^^^
+Download it from <https://github.com/yosefm/postptv/tree/ptvis_mem> 
+
+extract it somewhere. You only run the python from that directory of postptv and change the path to your files. All the data is included in the 'trajects' structure. 
+
+
+
+Using the following few lines::
+
+	from matplotlib import pyplot
+	from flowtracks.io import trajectories_ptvis
+	
+	inName = '../PTV/ptv_is.%d'
+	trajects = trajectories_ptvis(inName, traj_min_len=5) # the directory with the input files
+
+	pyplot.figure(figsize = (12, 10))
+
+	positions = [tr.pos() for tr in trajects]
+	for pos in positions:
+	trajX = [pos[k][0] for k in range(len(pos))]
+	trajY = [pos[k][1] for k in range(len(pos))]
+	pyplot.plot(trajX, trajY, '.')
+
+	pyplot.legend()
+	pyplot.show()
+
+
+Using this on the test file, You would get the sparse image as the following:
+
+|image1|
+
+.. |image1| image:: ../images/fig20.png
+
