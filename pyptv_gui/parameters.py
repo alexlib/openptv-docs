@@ -132,27 +132,27 @@ class PtvParams(Parameters):
 		9.4		thickness of glass [mm]
 	"""
 	
-	n_img = Int
-	img_name = List
-	img_cal = List		
-	hp_flag = Bool
-	allCam_flag = Bool
-	tiff_flag = Bool
-	imx = Int
-	imy = Int
-	pix_x = Float
-	pix_y = Float
-	chfield = Int
-	mmp_n1 = Float
-	mmp_n2 = Float
-	mmp_n3 = Float
-	mmp_d = Float
+	n_img = int
+	img_name = list
+	img_cal = list		
+	hp_flag = bool()
+	allCam_flag = bool()
+	tiff_flag = bool()
+	imx = int
+	imy = int
+	pix_x = float()
+	pix_y = float()
+	chfield = int
+	mmp_n1 = float()
+	mmp_n2 = float()
+	mmp_n3 = float()
+	mmp_d = float()
 
-	def __init__(self, n_img = Int, img_name = List, img_cal = List, hp_flag = Bool, allCam_flag = Bool, tiff_flag = Bool, imx = Int, imy = Int, pix_x = Float, pix_y = Float, chfield = Int, mmp_n1 = Float, mmp_n2 = Float, mmp_n3 = Float, mmp_d = Float, path = Parameters.default_path):
+	def __init__(self, n_img = int, img_name = list, img_cal = list, hp_flag = bool(), allCam_flag = bool(), tiff_flag = bool(), imx = int, imy = int, pix_x = float(), pix_y = float(), chfield = int, mmp_n1 = float(), mmp_n2 = float(), mmp_n3 = float(), mmp_d = float(), path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(n_img, img_name, img_cal, hp_flag, allCam_flag, tiff_flag, imx, imy, pix_x, pix_y, chfield, mmp_n1, mmp_n2, mmp_n3, mmp_d)
 
-	def set(self, n_img = Int, img_name = List, img_cal = List, hp_flag = Bool, allCam_flag = Bool, tiff_flag = Bool, imx = Int, imy = Int, pix_x = Float, pix_y = Float, chfield = Int, mmp_n1 = Float, mmp_n2 = Float, mmp_n3 = Float, mmp_d = Float):
+	def set(self, n_img = int, img_name = list, img_cal = list, hp_flag = bool(), allCam_flag = bool(), tiff_flag = bool(), imx = int, imy = int, pix_x = float(), pix_y = float(), chfield = int, mmp_n1 = float(), mmp_n2 = float(), mmp_n3 = float(), mmp_d = float()):
 		(self.n_img, self.img_name, self.img_cal, self.hp_flag, self.allCam_flag, self.tiff_flag, self.imx, self.imy, self.pix_x, self.pix_y, self.chfield, self.mmp_n1, self.mmp_n2, self.mmp_n3, self.mmp_d) = \
 			(n_img, img_name, img_cal, hp_flag, allCam_flag, tiff_flag, imx, imy, pix_x, pix_y, chfield, mmp_n1, mmp_n2, mmp_n3, mmp_d)
 
@@ -244,18 +244,18 @@ class CalOriParams(Parameters):
 		0	flag for frame (0), odd (1) or even fields (2)
 	"""
 
-	fixp_name = Str
-	img_cal_name = List
-	img_ori = List
-	tiff_flag = Bool
-	pair_flag = Bool
-	chfield = Int
+	fixp_name = str()
+	img_cal_name = list
+	img_ori = list
+	tiff_flag = bool()
+	pair_flag = bool()
+	chfield = int
 
-	def __init__(self, n_img = Int, fixp_name = Str, img_cal_name = List, img_ori = List, tiff_flag = Bool, pair_flag = Bool, chfield = Int, path = Parameters.default_path):
+	def __init__(self, n_img = int, fixp_name = str(), img_cal_name = list, img_ori = list, tiff_flag = bool(), pair_flag = bool(), chfield = int, path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(n_img, fixp_name, img_cal_name, img_ori, tiff_flag, pair_flag, chfield)
 	
-	def set(self, n_img = Int, fixp_name = Str, img_cal_name = List, img_ori = List, tiff_flag = Bool, pair_flag = Bool, chfield = Int):
+	def set(self, n_img = int, fixp_name = str(), img_cal_name = list, img_ori = list, tiff_flag = bool(), pair_flag = bool(), chfield = int):
 		self.n_img = n_img
 		(self.fixp_name, self.img_cal_name, self.img_ori, self.tiff_flag, self.pair_flag, self.chfield) = \
 			(fixp_name, img_cal_name, img_ori, tiff_flag, pair_flag, chfield)
@@ -329,15 +329,15 @@ class SequenceParams(Parameters):
 		119	 last image of sequence
 	"""
 	
-	base_name = List
-	first = Int
-	last = Int
+	base_name = list
+	first = int
+	last = int
 	
-	def __init__(self, n_img = Int, base_name = List, first = Int, last = Int, path = Parameters.default_path):
+	def __init__(self, n_img = int, base_name = list, first = int, last = int, path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(n_img, base_name, first, last)
 		
-	def set(self, n_img = Int, base_name = List, first = Int, last = Int):
+	def set(self, n_img = int, base_name = list, first = int, last = int):
 		self.n_img = n_img
 		(self.base_name, self.first, self.last) = \
 			(base_name, first, last)
@@ -396,21 +396,21 @@ class CriteriaParams(Parameters):
 		0.02	tolerance to epipolar line [mm]
 	"""
 
-	X_lay = List
-	Zmin_lay = List
-	Zmax_lay = List
-	cnx = Float
-	cny = Float
-	cn = Float
-	csumg = Float
-	corrmin = Float
-	eps0 = Float
+	X_lay = list
+	Zmin_lay = list
+	Zmax_lay = list
+	cnx = float()
+	cny = float()
+	cn = float()
+	csumg = float()
+	corrmin = float()
+	eps0 = float()
 	
-	def __init__(self, X_lay = List, Zmin_lay = List, Zmax_lay = List, cnx = Float, cny = Float, cn = Float, csumg = Float, corrmin = Float, eps0 = Float, path = Parameters.default_path):
+	def __init__(self, X_lay = list, Zmin_lay = list, Zmax_lay = list, cnx = float(), cny = float(), cn = float(), csumg = float(), corrmin = float(), eps0 = float(), path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(X_lay, Zmin_lay, Zmax_lay, cnx, cny, cn, csumg, corrmin, eps0)
 		
-	def set(self, X_lay = List, Zmin_lay = List, Zmax_lay = List, cnx = Float, cny = Float, cn = Float, csumg = Float, corrmin = Float, eps0 = Float):
+	def set(self, X_lay = list, Zmin_lay = list, Zmax_lay = list, cnx = float(), cny = float(), cn = float(), csumg = float(), corrmin = float(), eps0 = float()):
 		(self.X_lay, self.Zmin_lay, self.Zmax_lay, self.cnx, self.cny, self.cn, self.csumg, self.corrmin, self.eps0) = \
 			(X_lay, Zmin_lay, Zmax_lay, cnx, cny, cn, csumg, corrmin, eps0)
 
@@ -485,22 +485,22 @@ class TargRecParams(Parameters):
 		1		size of crosses
 	"""
 		
-	gvthres = List
-	disco = Int
-	nnmin = Int
-	nnmax = Int
-	nxmin = Int
-	nxmax = Int
-	nymin = Int
-	nymax = Int
-	sumg_min = Int
-	cr_sz = Int
+	gvthres = list
+	disco = int
+	nnmin = int
+	nnmax = int
+	nxmin = int
+	nxmax = int
+	nymin = int
+	nymax = int
+	sumg_min = int
+	cr_sz = int
 	
-	def __init__(self, n_img = Int, gvthres = List, disco = Int, nnmin = Int, nnmax = Int, nxmin = Int, nxmax = Int, nymin = Int, nymax = Int, sumg_min = Int, cr_sz = Int, path = Parameters.default_path):
+	def __init__(self, n_img = int, gvthres = list, disco = int, nnmin = int, nnmax = int, nxmin = int, nxmax = int, nymin = int, nymax = int, sumg_min = int, cr_sz = int, path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(n_img, gvthres, disco, nnmin, nnmax, nxmin, nxmax, nymin, nymax, sumg_min, cr_sz)
 		
-	def set(self, n_img = Int, gvthres = List, disco = Int, nnmin = Int, nnmax = Int, nxmin = Int, nxmax = Int, nymin = Int, nymax = Int, sumg_min = Int, cr_sz = Int):
+	def set(self, n_img = int, gvthres = list, disco = int, nnmin = int, nnmax = int, nxmin = int, nxmax = int, nymin = int, nymax = int, sumg_min = int, cr_sz = int):
 		self.n_img = n_img
 		(self.gvthres, self.disco, self.nnmin, self.nnmax, self.nxmin, self.nxmax, self.nymin, self.nymax, self.sumg_min, self.cr_sz) = \
 			(gvthres, disco, nnmin, nnmax, nxmin, nxmax, nymin, nymax, sumg_min, cr_sz)
@@ -578,13 +578,13 @@ class ManOriParams(Parameters):
 		22		image 4 p4
 	"""
 
-	nr = List(List(Int))
+	nr = list()
 	
-	def __init__(self, n_img = Int, n_pts = Int, nr = List(List(Int)), path = Parameters.default_path):
+	def __init__(self, n_img = int, n_pts = int, nr = list(), path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(n_img, n_pts, nr)
 	
-	def set(self, n_img = Int, n_pts = Int, nr = List(List(Int))):
+	def set(self, n_img = int, n_pts = int, nr = list()):
 		self.n_img = n_img
 		self.n_pts = n_pts
 		self.nr = nr
@@ -642,25 +642,25 @@ class DetectPlateParams(Parameters):
 		3 size of crosses
 	"""
 	
-	gvth_1 = Int
-	gvth_2 = Int
-	gvth_3 = Int
-	gvth_4 = Int
-	tol_dis = Int
-	min_npix = Int
-	max_npix = Int
-	min_npix_x = Int
-	max_npix_x = Int
-	min_npix_y = Int
-	max_npix_y = Int
-	sum_grey = Int
-	size_cross = Int
+	gvth_1 = int
+	gvth_2 = int
+	gvth_3 = int
+	gvth_4 = int
+	tol_dis = int
+	min_npix = int
+	max_npix = int
+	min_npix_x = int
+	max_npix_x = int
+	min_npix_y = int
+	max_npix_y = int
+	sum_grey = int
+	size_cross = int
 	
-	def __init__(self, gvth_1 = Int, gvth_2 = Int, gvth_3 = Int, gvth_4 = Int, tol_dis = Int, min_npix = Int, max_npix = Int, min_npix_x = Int, max_npix_x = Int, min_npix_y = Int, max_npix_y = Int, sum_grey = Int, size_cross = Int, path = Parameters.default_path):
+	def __init__(self, gvth_1 = int, gvth_2 = int, gvth_3 = int, gvth_4 = int, tol_dis = int, min_npix = int, max_npix = int, min_npix_x = int, max_npix_x = int, min_npix_y = int, max_npix_y = int, sum_grey = int, size_cross = int, path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(gvth_1, gvth_2, gvth_3, gvth_4, tol_dis, min_npix, max_npix, min_npix_x, max_npix_x, min_npix_y, max_npix_y, sum_grey, size_cross)
 		
-	def set(self, gvth_1 = Int, gvth_2 = Int, gvth_3 = Int, gvth_4 = Int, tol_dis = Int, min_npix = Int, max_npix = Int, min_npix_x = Int, max_npix_x = Int, min_npix_y = Int, max_npix_y = Int, sum_grey = Int, size_cross = Int):
+	def set(self, gvth_1 = int, gvth_2 = int, gvth_3 = int, gvth_4 = int, tol_dis = int, min_npix = int, max_npix = int, min_npix_x = int, max_npix_x = int, min_npix_y = int, max_npix_y = int, sum_grey = int, size_cross = int):
 		(self.gvth_1, self.gvth_2, self.gvth_3, self.gvth_4, self.tol_dis, self.min_npix, self.max_npix, self.min_npix_x, self.max_npix_x, self.min_npix_y, self.max_npix_y, self.sum_grey, self.size_cross) = \
 			(gvth_1, gvth_2, gvth_3, gvth_4, tol_dis, min_npix, max_npix, min_npix_x, max_npix_x, min_npix_y, max_npix_y, sum_grey, size_cross)
 
@@ -737,24 +737,24 @@ class OrientParams(Parameters):
 		0 interf
 	"""
 	
-	pnfo = Int
-	prin_dis = Int
-	xp = Int
-	yp = Int
-	k1 = Int
-	k2 = Int
-	k3 = Int
-	p1 = Int
-	p2 = Int
-	scx = Int
-	she = Int
-	interf = Int
+	pnfo = int
+	prin_dis = int
+	xp = int
+	yp = int
+	k1 = int
+	k2 = int
+	k3 = int
+	p1 = int
+	p2 = int
+	scx = int
+	she = int
+	interf = int
 
-	def __init__(self, pnfo = Int, prin_dis = Int, xp = Int, yp = Int, k1 = Int, k2 = Int, k3 = Int, p1 = Int, p2 = Int, scx = Int, she = Int, interf = Int, path = Parameters.default_path):
+	def __init__(self, pnfo = int, prin_dis = int, xp = int, yp = int, k1 = int, k2 = int, k3 = int, p1 = int, p2 = int, scx = int, she = int, interf = int, path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(pnfo, prin_dis, xp, yp, k1, k2, k3, p1, p2, scx, she, interf)
 		
-	def set(self, pnfo = Int, prin_dis = Int, xp = Int, yp = Int, k1 = Int, k2 = Int, k3 = Int, p1 = Int, p2 = Int, scx = Int, she = Int, interf = Int):
+	def set(self, pnfo = int, prin_dis = int, xp = int, yp = int, k1 = int, k2 = int, k3 = int, p1 = int, p2 = int, scx = int, she = int, interf = int):
 		(self.pnfo, self.prin_dis, self.xp, self.yp, self.k1, self.k2, self.k3, self.p1, self.p2, self.scx, self.she, self.interf) = \
 			(pnfo, prin_dis, xp, yp, k1, k2, k3, p1, p2, scx, she, interf)
 
@@ -809,21 +809,21 @@ class OrientParams(Parameters):
 
 
 class TrackingParams(Parameters):
-	dvxmin = Float
-	dvxmax = Float
-	dvymin = Float
-	dvymax = Float
-	dvzmin = Float
-	dvzmax = Float
-	angle = Float
-	dacc = Float
-	flagNewParticles = Bool
+	dvxmin = float()
+	dvxmax = float()
+	dvymin = float()
+	dvymax = float()
+	dvzmin = float()
+	dvzmax = float()
+	angle = float()
+	dacc = float()
+	flagNewParticles = bool()
 	
-	def __init__(self, dvxmin = Float, dvxmax = Float, dvymin = Float, dvymax = Float, dvzmin = Float, dvzmax = Float, angle = Float, dacc = Float, flagNewParticles = Bool, path = Parameters.default_path):
+	def __init__(self, dvxmin = float(), dvxmax = float(), dvymin = float(), dvymax = float(), dvzmin = float(), dvzmax = float(), angle = float(), dacc = float(), flagNewParticles = bool(), path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(dvxmin, dvxmax, dvymin, dvymax, dvzmin, dvzmax, angle, dacc, flagNewParticles)
 		
-	def set(self, dvxmin = Float, dvxmax = Float, dvymin = Float, dvymax = Float, dvzmin = Float, dvzmax = Float, angle = Float, dacc = Float, flagNewParticles = Bool):
+	def set(self, dvxmin = float(), dvxmax = float(), dvymin = float(), dvymax = float(), dvzmin = float(), dvzmax = float(), angle = float(), dacc = float(), flagNewParticles = bool()):
 		(self.dvxmin, self.dvxmax, self.dvymin, self.dvymax, self.dvzmin, self.dvzmax, self.angle, self.dacc, self.flagNewParticles) = \
 			(dvxmin, dvxmax, dvymin, dvymax, dvzmin, dvzmax, angle, dacc, flagNewParticles)
 
@@ -868,13 +868,13 @@ class TrackingParams(Parameters):
 	
 	
 class PftVersionParams(Parameters):
-	Existing_Target = Int
+	Existing_Target = int
 
-	def __init__(self, Existing_Target = Int, path = Parameters.default_path):
+	def __init__(self, Existing_Target = int, path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(Existing_Target)
 		
-	def set(self, Existing_Target = Int):
+	def set(self, Existing_Target = int):
 		self.Existing_Target = Existing_Target
 
 	def filename(self):
@@ -906,14 +906,14 @@ class PftVersionParams(Parameters):
 
 
 class ExamineParams(Parameters):
-	Examine_Flag = Bool
-	Combine_Flag = Bool
+	Examine_Flag = bool()
+	Combine_Flag = bool()
 
-	def __init__(self, Examine_Flag = Bool, Combine_Flag = Bool, path = Parameters.default_path):
+	def __init__(self, Examine_Flag = bool(), Combine_Flag = bool(), path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(Examine_Flag, Combine_Flag)
 		
-	def set(self, Examine_Flag = Bool, Combine_Flag = Bool):
+	def set(self, Examine_Flag = bool(), Combine_Flag = bool()):
 		(self.Examine_Flag, self.Combine_Flag) = \
 			(Examine_Flag, Combine_Flag)
 
@@ -964,18 +964,18 @@ class DumbbellParams(Parameters):
 		500 num iterations per click
 	"""
 	
-	dumbbell_eps = Float
-	dumbbell_scale = Float
-	dumbbell_gradient_descent = Float
-	dumbbell_penalty_weight = Float
-	dumbbell_step = Int
-	dumbbell_niter = Int
+	dumbbell_eps = float()
+	dumbbell_scale = float()
+	dumbbell_gradient_descent = float()
+	dumbbell_penalty_weight = float()
+	dumbbell_step = int
+	dumbbell_niter = int
 
-	def __init__(self, dumbbell_eps = Float, dumbbell_scale = Float, dumbbell_gradient_descent = Float, dumbbell_penalty_weight = Float, dumbbell_step = Int, dumbbell_niter = Int, path = Parameters.default_path):
+	def __init__(self, dumbbell_eps = float(), dumbbell_scale = float(), dumbbell_gradient_descent = float(), dumbbell_penalty_weight = float(), dumbbell_step = int, dumbbell_niter = int, path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(dumbbell_eps, dumbbell_scale, dumbbell_gradient_descent, dumbbell_penalty_weight, dumbbell_step, dumbbell_niter)
 		
-	def set(self, dumbbell_eps = Float, dumbbell_scale = Float, dumbbell_gradient_descent = Float, dumbbell_penalty_weight = Float, dumbbell_step = Int, dumbbell_niter = Int):
+	def set(self, dumbbell_eps = float(), dumbbell_scale = float(), dumbbell_gradient_descent = float(), dumbbell_penalty_weight = float(), dumbbell_step = int, dumbbell_niter = int):
 		(self.dumbbell_eps, self.dumbbell_scale, self.dumbbell_gradient_descent, self.dumbbell_penalty_weight, self.dumbbell_step, self.dumbbell_niter) = \
 			(dumbbell_eps, dumbbell_scale, dumbbell_gradient_descent, dumbbell_penalty_weight, dumbbell_step, dumbbell_niter)
 
@@ -1036,16 +1036,16 @@ class ShakingParams(Parameters):
 		5 - max number of frames to track
 	"""
 	
-	shaking_first_frame = Int
-	shaking_last_frame = Int
-	shaking_max_num_points = Int
-	shaking_max_num_frames = Int
+	shaking_first_frame = int
+	shaking_last_frame = int
+	shaking_max_num_points = int
+	shaking_max_num_frames = int
 	
-	def __init__(self, shaking_first_frame = Int, shaking_last_frame = Int, shaking_max_num_points = Int, shaking_max_num_frames = Int, path = Parameters.default_path):
+	def __init__(self, shaking_first_frame = int, shaking_last_frame = int, shaking_max_num_points = int, shaking_max_num_frames = int, path = Parameters.default_path):
 		Parameters.__init__(self, path)
 		self.set(shaking_first_frame, shaking_last_frame, shaking_max_num_points, shaking_max_num_frames)
 		
-	def set(self, shaking_first_frame = Int, shaking_last_frame = Int, shaking_max_num_points = Int, shaking_max_num_frames = Int):
+	def set(self, shaking_first_frame = int, shaking_last_frame = int, shaking_max_num_points = int, shaking_max_num_frames = int):
 		(self.shaking_first_frame, self.shaking_last_frame, self.shaking_max_num_points, self.shaking_max_num_frames) = \
 			(shaking_first_frame, shaking_last_frame, shaking_max_num_points, shaking_max_num_frames)
 

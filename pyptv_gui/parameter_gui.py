@@ -194,16 +194,16 @@ class Main_Params (HasTraits):
 	#TODO: then why are they here?
 	#Answer: historical reasons, back compatibility
 	
-	tiff_flag = Bool()
-	imx = Int()
-	imy = Int()
-	pix_x = Float()
-	pix_y = Float()
-	chfield = Int()
+	tiff_flag = bool()
+	imx = int()
+	imy = int()
+	pix_x = float()
+	pix_y = float()
+	chfield = int()
 	img_cal_name=[]
 
 	#unsed for calibration
-	fixp_name = Str()
+	fixp_name = str()
 	img_ori = []
 	
 	
@@ -572,15 +572,15 @@ class Calib_Params(HasTraits):
 
 	#general and unsed variables
 	pair_enable_flag = Bool(True)
-	n_img = Int()
+	n_img = int()
 	img_name = []
 	img_cal=[]
-	hp_flag = Bool()
-	allCam_flag = Bool()
-	mmp_n1 = Float()
-	mmp_n2 = Float()
-	mmp_n3 = Float()
-	mmp_d = Float()
+	hp_flag = bool()
+	allCam_flag = bool()
+	mmp_n1 = float()
+	mmp_n2 = float()
+	mmp_n3 = float()
+	mmp_d = float()
 	
 
 	
