@@ -104,7 +104,7 @@ class DemoThread(Thread):
 				img_name=base_name[j]+seq_ch
 				print ("Setting image: ",img_name)
 				try:
-                                        img=imread(img_name).astype(np.float)
+					img=imread(img_name).astype(np.float)
 					self.temp_img[-1].append(imresize(img,0.5))
 				except:
 					print "Error reading file"

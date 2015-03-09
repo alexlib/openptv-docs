@@ -411,8 +411,9 @@ int    	i_cam;
   Rmax += (rw - fmod (Rmax, rw));
     
   /* get # of rasterlines in r,z */
-  nr = Rmax/rw + 1;
-  nz = (Zmax_t-Zmin_t)/rw + 1;
+  
+  nr = (int)(Rmax/rw + 1);
+  nz = (int)((Zmax_t-Zmin_t)/rw + 1);
  
   /* create twodimensional mmLUT structure */
   //trans
@@ -439,11 +440,13 @@ int    	i_cam;
 	//old mmLUT[i_cam].data[i*nz + j]= multimed_r_nlay (Ex[i_cam], mmp, 
 	//      	                                        Ri[i]+Ex[i_cam].x0, Ex[i_cam].y0, Zi[j]);
 	//trans
-	trans_Cam_Point(Ex[i_cam],mmp,G[i_cam],X,Y,Z,&Ex_t[i_cam],&X_t,&Y_t,&Z_t,&cross_p,&cross_c);
-      mmLUT[i_cam].data[i*nz + j]
-	= multimed_r_nlay_v2 (Ex_t[i_cam], Ex[i_cam], mmp, 
+	// trans_Cam_Point(Ex[i_cam],mmp,G[i_cam],X,Y,Z,&Ex_t[i_cam],&X_t,&Y_t,&Z_t,&cross_p,&cross_c);
+    mmLUT[i_cam].data[i*nz + j] = multimed_r_nlay_v2 (Ex_t[i_cam], Ex[i_cam], mmp, \
 		                  Ri[i]+Ex_t[i_cam].x0, Ex_t[i_cam].y0, Zi[j]);
     }
+    
+    free (Ri);	// preventing memory leaks, Ad Holten, 04-2013
+    free (Zi);
 }
 
 
@@ -494,8 +497,10 @@ double	X,Y,Z;
 
 
 
-void volumedimension (double *xmax, double *xmin, double *ymax, double *ymin, \
-double *zmax, double *zmin, int num_cams){
+void volumedimension (xmax, xmin, ymax, ymin, zmax, zmin, num_cams)
+double *xmax, *xmin, *ymax, *ymin, *zmax, *zmin;
+int num_cams;
+{
   int	i_cam;
   double X,Y,Z, R, X1,Y1,Z1, Zmin, Rmax=0,Zmax, a,b,c;
   double x,y;

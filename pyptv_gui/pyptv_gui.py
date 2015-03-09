@@ -12,6 +12,8 @@ http://opensource.org/licenses/MIT
 .. moduleauthors:: OpenPTV group
 
 """
+from traits.etsconfig.api import ETSConfig
+ETSConfig.toolkit = 'qt4'
 
 from traits.api \
 	import HasTraits, Str, Int, List, Bool, Enum, Instance, Any
@@ -90,10 +92,10 @@ except:
 class Clicker(ImageInspectorTool):
 	"""  Clicker class handles right mouse click actions from the tree and menubar actions
 	"""
-	left_changed=Int(1)
-	right_changed=Int(1)
-	x=0
-	y=0
+	left_changed = Int(1)
+	right_changed = Int(1)
+	x = 0
+	y = 0
 	def normal_left_down(self, event):
 		""" Handles the left mouse button being clicked.
 		Fires the **new_value** event with the data (if any) from the event's
@@ -107,24 +109,25 @@ class Clicker(ImageInspectorTool):
 			self.x=(x_index)
 			self.y=(y_index)
 			self.data_value=image_data.data[y_index, x_index]
-			self.left_changed=1-self.left_changed
+			self.left_changed = 1 - self.left_changed
 			self.last_mouse_position = (event.x, event.y)
 		return
 
 	def normal_right_down(self, event):
+		""" Handles the right mouse button being clicked. Fires the **new_value** event 
+		with the data (if any) from the event position.
+		"""
 		plot = self.component
 		if plot is not None:
 			ndx = plot.map_index((event.x, event.y))
-
 			x_index, y_index = ndx
 			# image_data=plot.value
 			self.x=(x_index)
 			self.y=(y_index)
-			
-			self.right_changed=1-self.right_changed
+			self.right_changed = 1-self.right_changed
+			print "self.right_changed: ", self.right_changed
 			print self.x
 			print self.y
-			
 			self.last_mouse_position = (event.x, event.y)
 		return
 
@@ -546,6 +549,7 @@ class TreeMenuHandler (Handler):
 			1) initialization - binded by ptv.py_sequence_init(..) function
 			2) main loop processing - binded by ptv.py_sequence_loop(..) function
 		"""
+		
 		extern_sequence=info.object.plugins.sequence_alg
 		if extern_sequence!='default':
 			try:
@@ -579,7 +583,7 @@ class TreeMenuHandler (Handler):
 				seq_ch="%04d" % i
 					
 				for j in range (n_camera):
-					img_name=base_name[j]+seq_ch
+					img_name = base_name[j] + seq_ch
 					print ("Setting image: ",img_name)
 					try:
 						temp_img=imread(img_name).astype(np.ubyte)
@@ -587,9 +591,10 @@ class TreeMenuHandler (Handler):
 						print "Error reading file"
 						   
 					ptv.py_set_img(temp_img,j)
-					ptv.py_sequence_loop(0,i)
+				
+				ptv.py_sequence_loop(0,i)
 		else:
-			print "Sequence by using "+extern_sequence
+			print "Sequence by using "+ extern_sequence
 			sequence=seq.Sequence(ptv=ptv, exp1=info.object.exp1,camera_list=info.object.camera_list)
 			sequence.do_sequence()
 			#print "Sequence by using "+extern_sequence+" has failed."
@@ -947,39 +952,40 @@ class MainGUI (HasTraits):
 		   
 	#------------------------------------------------------
 	def right_click_process(self):
-		x_clicked,y_clicked,n_camera=0,0,0
-		h_img=self.exp1.active_params.m_params.imx
-		v_img=self.exp1.active_params.m_params.imy
-		print h_img,v_img
+		x_clicked, y_clicked, n_camera = 0,0,0
+		h_img = self.exp1.active_params.m_params.imx
+		v_img = self.exp1.active_params.m_params.imy
+		
 		for i in range(len(self.camera_list)):
-			
-				n_camera=i
-				x_clicked,y_clicked=self.camera_list[i]._click_tool.x,\
-									self.camera_list[i]._click_tool.y
-				x1,y1,x2,y2,x1_points,y1_points,intx1,inty1=ptv.py_right_click(x_clicked,y_clicked,n_camera)
-				if (x1!=-1 and y1!=-1):
-					self.camera_list[n_camera].right_p_x0.append(intx1)
-					self.camera_list[n_camera].right_p_y0.append(inty1)
-					self.camera_list[n_camera].drawcross("right_p_x0","right_p_y0",
-						self.camera_list[n_camera].right_p_x0\
-					,self.camera_list[n_camera].right_p_y0,"cyan",3,marker1="circle")
-					self.camera_list[n_camera]._plot.request_redraw()
-					print "right click process"
-					print x1,y1,x2,y2,x1_points,y1_points
-					color_camera=['yellow','red','blue','green']
+			n_camera = i
+			x_clicked,y_clicked=self.camera_list[i]._click_tool.x,self.camera_list[i]._click_tool.y
+			x1,y1,x2,y2,x1_points,y1_points,intx1,inty1=ptv.py_right_click(\
+			x_clicked,y_clicked,n_camera)
+			if (x1!=-1 and y1!=-1):
+				self.camera_list[n_camera].right_p_x0.append(intx1)
+				self.camera_list[n_camera].right_p_y0.append(inty1)
+				self.camera_list[n_camera].drawcross("right_p_x0","right_p_y0",\
+				self.camera_list[n_camera].right_p_x0,\
+				self.camera_list[n_camera].right_p_y0, "cyan", 3, marker1 = "circle")
+				self.camera_list[n_camera]._plot.request_redraw()
+				print "right click process"
+				print "(x1,y1),(x2,y2),(x1_points,y1_points)" 
+				print zip(x1,y1),zip(x2,y2),zip(x1_points,y1_points)
+				color_camera=['yellow','red','blue','green']
 					#print [x1[i]],[y1[i]],[x2[i]],[y2[i]]
-					for j in range(len(self.camera_list)):
-						if j is not n_camera:
-							count=self.camera_list[i]._plot.plots.keys()
-							self.camera_list[j].drawline("right_cl_x"+str(len(count)),"right_cl_y"+str(len(count)),x1[j],y1[j],x2[j],y2[j],color_camera[n_camera])
-							self.camera_list[j]._plot.index_mapper.range.set_bounds(0,h_img)
-							self.camera_list[j]._plot.value_mapper.range.set_bounds(0,v_img)
-							self.camera_list[j].drawcross("right_p_x1","right_p_y1",x1_points[j],y1_points[j],\
-							color_camera[n_camera],2)
-							self.camera_list[j]._plot.request_redraw()
-				else:
-					print ("No nearby points for epipolar lines")
-				self.camera_list[i].rclicked=0
+				for j in range(len(self.camera_list)):
+					if j is not n_camera:
+						count=self.camera_list[i]._plot.plots.keys()
+						self.camera_list[j].drawline("right_cl_x"+str(len(count)),"right_cl_y"+str(len(count)),x1[j],y1[j],x2[j],y2[j],color_camera[n_camera])
+						self.camera_list[j]._plot.index_mapper.range.set_bounds(0,h_img)
+						self.camera_list[j]._plot.value_mapper.range.set_bounds(0,v_img)
+						self.camera_list[j].drawcross("right_p_x1","right_p_y1",\
+						x1_points[j],y1_points[j],color_camera[n_camera],2)
+						self.camera_list[j]._plot.request_redraw()
+					else:
+						print ("No nearby points for epipolar lines")
+				
+			self.camera_list[n_camera].rclicked=0
 
    
 	def update_plots(self,images,is_float=0):

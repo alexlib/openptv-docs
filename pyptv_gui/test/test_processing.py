@@ -2,9 +2,11 @@
 # back, etc.
 
 import unittest
-import os, shutil, glob, re
+import os, shutil, glob, re, sys
 
 from scipy.misc import imread
+
+sys.path.append('../../src_c')
 
 from ptv1 import py_start_proc_c, py_init_proc_c
 from ptv1 import py_sequence_init, py_sequence_loop, py_set_img

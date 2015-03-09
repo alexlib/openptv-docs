@@ -23,12 +23,16 @@ Contents:
    add_doc
    add_soft
    
+
+
 API:
 
 .. toctree::
    :maxdepth: 2
 
+{% if not READTHEDOCS %}
    code
+{% endif %}
    api_reference
    downloads_page
    

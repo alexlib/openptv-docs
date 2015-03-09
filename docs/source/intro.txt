@@ -12,9 +12,7 @@ and post-processing routines using Python/NumPy/SciPy/PIL/Matplotlib/Mayavi/etc.
 About 3D-PTV measurement method
 =========================================
 
-Slideshare.net presentation from Beat Luethi
-
-http://www.slideshare.net/guest290904/3dptv-particle-tracking-velocimetry
+`3D-PTV in a nutshell  <http://www.slideshare.net/guest290904/3dptv-particle-tracking-velocimetry>`_
 
 Objectives of the 3D-PTV experimental method
 ---------------------------------------------
@@ -80,8 +78,8 @@ tasks:
 
 + Calibration of the multi-camera system (determination of camera
   exterior and interior orientations, lens distortion and further
-  disturbances, (e.g. [PDF of Willneff and Maas,2000>`http://www.tu-
-  dresden.de/fghgipf/forschung/material/publ2000/JoWi_paper.pdf`_]) and
+  disturbances, (e.g. `Willneff and Maas, 2000 <http://www.tu-
+  dresden.de/fghgipf/forschung/material/publ2000/JoWi_paper.pdf>`_) and
   the exact geometric modelling ("multimedia geometry" - each beam from
   a particle to the sensor passes the three optical media water, glass,
   air with different refractive indices, which leads to a twice broken
@@ -159,12 +157,10 @@ Potential
 Real time image processing schemes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
 + Real time image compression using a customized FPGA design,
   `http://scitation.aip.org/content/aip/journal/rsi/78/2/10.1063/1.2536719`_
 + Real time image **processing** using a on-camera FPGA,
   `http://dx.doi.org/10.1007/s00348-009-0715-5`_
-
 
 
 Collaboration

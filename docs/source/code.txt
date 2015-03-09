@@ -1,9 +1,9 @@
 OpenPTV-Python source code
 ==========================
-
+{% if not READTHEDOCS %}
 .. automodule:: pyptv_gui
 	:members:
-
+{% endif %}
 
 Parameters I/O
 ---------------------------

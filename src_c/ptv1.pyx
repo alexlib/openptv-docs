@@ -50,7 +50,7 @@ cdef extern from "globals.h": # to lose the declspec
     int sequence_proc_c(int dumb_flag)
     int sequence_proc_loop_c(int dumbell, int i)
 
-    tracking_run* trackcorr_c_init ()
+    tracking_run* trackcorr_c_init()
     int trackcorr_c_loop (tracking_run *run_info, int step, int display)
     int trackcorr_c_finish(tracking_run *run_info, int step)
     int trackback_c ()
@@ -368,26 +368,29 @@ def py_ptv_set_dumbbell(dumbbell):
     dumbbell_pyptv=<int>dumbbell
     
 def py_right_click(int coord_x, int coord_y, n_image):
-    global rclick_intx1,rclick_inty1,rclick_intx2,rclick_inty2, rclick_points_x1,rclick_points_y1,rclick_count,rclick_points_intx1, rclick_points_inty1
+    global rclick_intx1,rclick_inty1,rclick_intx2,rclick_inty2,rclick_points_x1, rclick_points_y1,rclick_count,rclick_points_intx1, rclick_points_inty1
+    
     x2_points,y2_points,x1,y1,x2,y2=[],[],[],[],[],[]
     
     cdef volume_par *vpar = read_volume_par("parameters/criteria.par")
     r = mouse_proc_c (coord_x, coord_y, 3, n_image, vpar, cpar)
     free(vpar)
     
-    if r==-1:
+    if r == -1:
         return -1,-1,-1,-1,-1,-1,-1,-1
     for i in range(n_img):
         x2_temp,y2_temp=[],[]
         for j in range(rclick_count[i]):
             x2_temp.append(rclick_points_x1[i][j])
             y2_temp.append(rclick_points_y1[i][j])
+    
         x2_points.append(x2_temp)
         y2_points.append(y2_temp)
         x1.append(rclick_intx1[i])
         y1.append(rclick_inty1[i])
         x2.append(rclick_intx2[i])
         y2.append(rclick_inty2[i])
+    
     return  x1,y1,x2,y2,x2_points,y2_points,rclick_points_intx1, rclick_points_inty1
             
 def py_determination_proc_c(dumbbell):
