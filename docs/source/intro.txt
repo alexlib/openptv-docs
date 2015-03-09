@@ -157,12 +157,10 @@ Potential
 Real time image processing schemes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-+ `Real time image compression using a customized FPGA design,
-  <http://link.aip.org/link/?RSINAK/78/023704/1>`_
-+ `Real time image processing using a on-camera FPGA,
-  <http://adsabs.harvard.edu/abs/2010ExFl...48..105K>`_
-
++ Real time image compression using a customized FPGA design,
+  `http://scitation.aip.org/content/aip/journal/rsi/78/2/10.1063/1.2536719`_
++ Real time image **processing** using a on-camera FPGA,
+  `http://dx.doi.org/10.1007/s00348-009-0715-5`_
 
 
 Collaboration
@@ -181,7 +179,7 @@ Collaboration
 We organize the PTV benchmarking (open, free and user-friendly, we'll
 publish only what you want to be published) in order to make our
 algorithms validated versus each other and improve our particle
-tracking abilities worldwide. Write to `Alex`_ if you want to **join**
+tracking abilities worldwide. Write to openptv mailing list if you want to **join**
 with your own version of particle tracking software or with your data
 test case (e.g. that you find difficult to track or to improve).
 
