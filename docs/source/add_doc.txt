@@ -10,4 +10,4 @@ Detailed documentation
 + Technical aspects of 3D PTV :download:`[Link] <../add_docs/Technical_aspects.pdf>`
 + Python Bindings to PTV library :download:`[Link] <../add_docs/Python_bindings.pdf>`
 + Tutorial written by Hristo Goumnerov  :download:`[Link] <../add_docs/OpenPTV Manual - first draft.docx>`
-+ Master thesis, Three-dimensional particle tracking velocimetry for turbulene applications, by Jin-Tae Kim `[Website Link] <http://chamorro.mechse.illinois.edu/3d.htm>`_
++ Master thesis, Three-dimensional particle tracking velocimetry for turbulene applications, written by Jin-Tae Kim in 2015 `[Website Link] <http://chamorro.mechse.illinois.edu/3d.htm>`_
