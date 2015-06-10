@@ -94,40 +94,39 @@ void correspondences_4 (volume_par *vpar, control_par *cpar)
      printf ("Establishing correspondences  %d - %d\n", i1, i2);
      /* establish correspondences from num[i1] points of img[i1] to img[i2] */
 
-      for (i=0; i<num[i1]; i++)	if (geo[i1][i].x != -999) {
-      o = epi_mm (geo[i1][i].x,geo[i1][i].y,
-		      Ex[i1], I[i1], G[i1], Ex[i2], I[i2], G[i2], mmp, vpar,
-		      &xa12, &ya12, &xb12, &yb12);
+	  for (i=0; i<num[i1]; i++)	if (geo[i1][i].x != -999) {
+		  o = epi_mm (geo[i1][i].x,geo[i1][i].y,
+				  Ex[i1], I[i1], G[i1], Ex[i2], I[i2], G[i2], mmp, vpar,
+				  &xa12, &ya12, &xb12, &yb12);
 	  
-    /////ich glaube, da muss ich einsteigen, wenn alles erledigt ist.
-	  ///////mit bild_1 x,y Epipole machen und dann selber was schreiben um die Distanz zu messen.
-	  ///////zu Punkt in bild_2.
+		/////ich glaube, da muss ich einsteigen, wenn alles erledigt ist.
+		  ///////mit bild_1 x,y Epipole machen und dann selber was schreiben um die Distanz zu messen.
+		  ///////zu Punkt in bild_2.
 
-	  /* origin point in the list */
-	  p1 = i;  list[i1][i2][p1].p1 = p1;	pt1 = geo[i1][p1].pnr;
+		  /* origin point in the list */
+		  p1 = i;  list[i1][i2][p1].p1 = p1;	pt1 = geo[i1][p1].pnr;
 
-	  /* search for a conjugate point in geo[i2] */
-      find_candidate_plus (geo[i2], pix[i2], num[i2],
-			       xa12, ya12, xb12, yb12, 
-			       pix[i1][pt1].n,pix[i1][pt1].nx,pix[i1][pt1].ny,
-			       pix[i1][pt1].sumg, cand, &count, i2, vpar);
-	  /* write all corresponding candidates to the preliminary list */
-	  /* of correspondences */
-	  if (count > maxcand)	{ count = maxcand; }
-	  for (j=0; j<count; j++)
-	    {
-	      list[i1][i2][p1].p2[j] = cand[j].pnr;
-	      list[i1][i2][p1].corr[j] = cand[j].corr;
-	      list[i1][i2][p1].dist[j] = cand[j].tol;
-	    }
-	  list[i1][i2][p1].n = count;
-	}
+		  /* search for a conjugate point in geo[i2] */
+		  find_candidate_plus (geo[i2], pix[i2], num[i2],
+					   xa12, ya12, xb12, yb12, 
+					   pix[i1][pt1].n,pix[i1][pt1].nx,pix[i1][pt1].ny,
+					   pix[i1][pt1].sumg, cand, &count, i2, vpar);
+		  /* write all corresponding candidates to the preliminary list */
+		  /* of correspondences */
+		  if (count > maxcand)	count = maxcand; 
+	  
+		  for (j=0; j<count; j++) {
+			  list[i1][i2][p1].p2[j] = cand[j].pnr;
+			  list[i1][i2][p1].corr[j] = cand[j].corr;
+			  list[i1][i2][p1].dist[j] = cand[j].tol;
+			}
+		  list[i1][i2][p1].n = count;
+		}
   }
 
   /* ------------------------------------------------------------------ */
   /* search consistent quadruplets in the list */
-  if (cpar->num_cams == 4)
-    {
+  if (cpar->num_cams == 4) {
       printf ("Search consistent quadruplets\n");
 	printf("num0=%d\n",num[0]);
       for (i=0, match0=0; i<num[0]; i++)
@@ -211,54 +210,50 @@ void correspondences_4 (volume_par *vpar, control_par *cpar)
   /* ----------------------------------------------------------------------- */
 
   /* search consistent triplets :  123, 124, 134, 234 */
-  if ((cpar->num_cams ==4 && allCam_flag==0) || cpar->num_cams ==3)
-    {
+  if ((cpar->num_cams == 4 && allCam_flag==0) || cpar->num_cams == 3){
    //   puts ("Search consistent triplets");
-      printf("Search consistent triplets");
-      match0=0;
+      printf("Search consistent triplets \n");
+      match0 = 0;
       for (i1 = 0; i1 < cpar->num_cams - 2; i1++)
         for (i2 = i1 + 1; i2 < cpar->num_cams - 1; i2++)
-            for (i3 = i2 + 1; i3 < cpar->num_cams; i3++)
-	    for (i=0; i<num[i1]; i++)
-	      {
-		p1 = list[i1][i2][i].p1;
-		if (p1 > nmax  ||  tim[i1][p1] > 0)	continue;
+           for (i3 = i2 + 1; i3 < cpar->num_cams; i3++)
+				for (i=0; i<num[i1]; i++){
+					 p1 = list[i1][i2][i].p1;
+					 if (p1 > nmax  ||  tim[i1][p1] > 0)	continue;
 
-		for (j=0; j<list[i1][i2][i].n; j++)
-		  for (k=0; k<list[i1][i3][i].n; k++)
-		    {
-		      p2 = list[i1][i2][i].p2[j];
-		      if (p2 > nmax  ||  tim[i2][p2] > 0)	continue;
-		      p3 = list[i1][i3][i].p2[k];
-		      if (p3 > nmax  ||  tim[i3][p3] > 0)	continue;
-
-		      for (m=0; m<list[i2][i3][p2].n; m++)
-			{
-			  p31 = list[i2][i3][p2].p2[m];
-			  if (p3 == p31)
-			    {
-			      corr = (list[i1][i2][i].corr[j]
-				      + list[i1][i3][i].corr[k]
-				      + list[i2][i3][p2].corr[m])
-				/ (list[i1][i2][i].dist[j]
-				   + list[i1][i3][i].dist[k]
-				   + list[i2][i3][p2].dist[m]);
-                if (corr > vpar->corrmin) {
-                    for (n = 0; n < cpar->num_cams; n++) con0[match0].p[n] = -2;
-                        con0[match0].p[i1] = p1;
-                        con0[match0].p[i2] = p2;
-                        con0[match0].p[i3] = p3;
-                        con0[match0++].corr = corr;
-                    }
-				    if (match0 == 4*nmax) {   /* security */
-                        printf ("Overflow in correspondences:");
-                        printf (" > %d matches\n", match0);
-                        i = num[i1]; /* Break out of the outer loop over i */
+					 for (j=0; j<list[i1][i2][i].n; j++)
+					  for (k=0; k<list[i1][i3][i].n; k++) {
+						  p2 = list[i1][i2][i].p2[j];
+						  if (p2 > nmax  ||  tim[i2][p2] > 0)	continue;
+						  p3 = list[i1][i3][i].p2[k];
+						  if (p3 > nmax  ||  tim[i3][p3] > 0)	continue;
+						  						  
+						  for (m=0; m<list[i2][i3][p2].n; m++) {
+						     p31 = list[i2][i3][p2].p2[m];
+						     
+						     if (p3 == p31) {
+							    corr = (list[i1][i2][i].corr[j]
+								  + list[i1][i3][i].corr[k]
+								  + list[i2][i3][p2].corr[m])
+							    / (list[i1][i2][i].dist[j]
+							    + list[i1][i3][i].dist[k]
+							    + list[i2][i3][p2].dist[m]);
+							  if (corr > vpar->corrmin) {
+								for (n = 0; n < cpar->num_cams; n++) con0[match0].p[n] = -2;
+									con0[match0].p[i1] = p1;
+									con0[match0].p[i2] = p2;
+									con0[match0].p[i3] = p3;
+									con0[match0++].corr = corr;
+								}
+								if (match0 == 4*nmax) {   /* security */
+									printf ("Overflow in correspondences:\n");
+									printf (" > %d matches\n", match0);
+									i = num[i1]; /* Break out of the outer loop over i */
+								}
+							}
+						  }
+					    }
 					}
-			    }
-			}
-		    }
-	      }
 
       /* ----------------------------------------------------------------------- */
 
@@ -270,21 +265,20 @@ void correspondences_4 (volume_par *vpar, control_par *cpar)
       /* pragmatic version: */
       /* take triplets from the top to the bottom of the sorted list */
       /* only if none of the points has already been used */
-      for (i=0; i<match0; i++)
-	{
-	  p1 = con0[i].p[0];	if (p1 > -1)	if (++tim[0][p1] > 1)	continue;
-	  p2 = con0[i].p[1];	if (p2 > -1)	if (++tim[1][p2] > 1)	continue;
-	  p3 = con0[i].p[2];	if (p3 > -1)	if (++tim[2][p3] > 1)	continue;
-	  p4 = con0[i].p[3];	if (p4 > -1  && cpar->num_cams > 3) if (++tim[3][p4] > 1) continue;
+      for (i=0; i<match0; i++){
+		  p1 = con0[i].p[0];	if (p1 > -1)	if (++tim[0][p1] > 1)	continue;
+		  p2 = con0[i].p[1];	if (p2 > -1)	if (++tim[1][p2] > 1)	continue;
+		  p3 = con0[i].p[2];	if (p3 > -1)	if (++tim[2][p3] > 1)	continue;
+		  p4 = con0[i].p[3];	if (p4 > -1  && cpar->num_cams > 3) if (++tim[3][p4] > 1) continue;
 
-	  con[match++] = con0[i];
-	}
+		  con[match] = con0[i];
+		  match++;
+	  }
 
       match3 = match - match4;
-     // sprintf (buf, "%d consistent quadruplets, %d triplets ", match4, match3);
-      //puts (buf);
-printf ( "%d consistent quadruplets, %d triplets ", match4, match3);
- printf("\nCheckpoint 8\n");
+
+	  printf ( "%d consistent quadruplets, %d triplets \n", match4, match3);
+ 		
       /* repair artifact (?) */
       if (cpar->num_cams == 3) for (i=0; i<match; i++)	con[i].p[3] = -1;
     }
@@ -294,67 +288,66 @@ printf ( "%d consistent quadruplets, %d triplets ", match4, match3);
 
   /* search consistent pairs :  12, 13, 14, 23, 24, 34 */
   /* only if an object model is available or if only 2 images are used */
-      if(cpar->num_cams > 1 && allCam_flag==0){
-	printf("Search pairs");
+	if(cpar->num_cams > 1 && allCam_flag==0){
+		 printf(" Search pairs \n");
 
 
-  match0 = 0;
-  for (i1 = 0; i1 < cpar->num_cams - 1; i1++)
-    if ( cpar->num_cams == 2 || (num[0] < 64 && num[1] < 64 && num[2] < 64 && num[3] < 64))
-      for (i2 = i1 + 1; i2 < cpar->num_cams; i2++)
-	for (i=0; i<num[i1]; i++)
-	  {
-	    p1 = list[i1][i2][i].p1;
-	    if (p1 > nmax  ||  tim[i1][p1] > 0)	continue;
+		  match0 = 0;
+		  for (i1 = 0; i1 < cpar->num_cams - 1; i1++)
+			if ( cpar->num_cams == 2 || (num[0] < 64 && num[1] < 64 && num[2] < 64 && num[3] < 64))
+			  for (i2 = i1 + 1; i2 < cpar->num_cams; i2++)
+			for (i=0; i<num[i1]; i++)
+			  {
+				p1 = list[i1][i2][i].p1;
+				if (p1 > nmax  ||  tim[i1][p1] > 0)	continue;
 
-	    /* take only unambigous pairs */
-	    if (list[i1][i2][i].n != 1)	continue;
+				/* take only unambigous pairs */
+				if (list[i1][i2][i].n != 1)	continue;
 
-	    p2 = list[i1][i2][i].p2[0];
-	    if (p2 > nmax  ||  tim[i2][p2] > 0)	continue;
+				p2 = list[i1][i2][i].p2[0];
+				if (p2 > nmax  ||  tim[i2][p2] > 0)	continue;
 
-	    corr = list[i1][i2][i].corr[0] / list[i1][i2][i].dist[0];
+				corr = list[i1][i2][i].corr[0] / list[i1][i2][i].dist[0];
 
-	    if (corr > vpar->corrmin)
-	      {
-		con0[match0].p[i1] = p1;
-		con0[match0].p[i2] = p2;
-		con0[match0++].corr = corr;
-	      }
-	  }
+				if (corr > vpar->corrmin)
+				  {
+				con0[match0].p[i1] = p1;
+				con0[match0].p[i2] = p2;
+				con0[match0++].corr = corr;
+				  }
+			  }
 
-  /* ----------------------------------------------------------------------- */
-
-
-  /* sort pairs for match quality (.corr) */
-  quicksort_con (con0, match0);
-
-  /* ----------------------------------------------------------------------- */
+		  /* ----------------------------------------------------------------------- */
 
 
-  /* take pairs from the top to the bottom of the sorted list */
-  /* only if none of the points has already been used */
-  for (i=0; i<match0; i++)
-    {
-      p1 = con0[i].p[0];	if (p1 > -1)	if (++tim[0][p1] > 1)	continue;
-      p2 = con0[i].p[1];	if (p2 > -1)	if (++tim[1][p2] > 1)	continue;
-      p3 = con0[i].p[2];	if (p3 > -1  && cpar->num_cams > 2)
-	if (++tim[2][p3] > 1)	continue;
-      p4 = con0[i].p[3];	if (p4 > -1  && cpar->num_cams > 3)
-	if (++tim[3][p4] > 1)	continue;
+		  /* sort pairs for match quality (.corr) */
+		  quicksort_con (con0, match0);
 
-      con[match++] = con0[i];
-    }
-  } //end pairs?
+		  /* ----------------------------------------------------------------------- */
 
-  match2 = match-match4-match3;
-  if(cpar->num_cams == 1){
- printf ( "determined %d points from 2D", match1);
-  }
-  else{
- printf ("%d consistent quadruplets(red), %d triplets(green) and %d unambigous pairs\n",
+
+		  /* take pairs from the top to the bottom of the sorted list */
+		  /* only if none of the points has already been used */
+		  for (i=0; i<match0; i++) {
+			  p1 = con0[i].p[0];	if (p1 > -1)	if (++tim[0][p1] > 1)	continue;
+			  p2 = con0[i].p[1];	if (p2 > -1)	if (++tim[1][p2] > 1)	continue;
+			  p3 = con0[i].p[2];	if (p3 > -1  && cpar->num_cams > 2)
+			  if (++tim[2][p3] > 1)	continue;
+			  p4 = con0[i].p[3];	if (p4 > -1  && cpar->num_cams > 3)
+			  if (++tim[3][p4] > 1)	continue;
+
+			  con[match++] = con0[i];
+			}
+		  } //end pairs?
+
+     match2 = match-match4-match3;
+    if(cpar->num_cams == 1){
+       printf ( "determined %d points from 2D", match1);
+       }
+     else{
+      printf ("%d quadruplets (red), %d triplets (green) and %d unambigous pairs\n",
 	      match4, match3, match2);
-  }
+     }
   /* ----------------------------------------------------------------------- */
 
   /* give each used pix the correspondence number */
@@ -382,7 +375,7 @@ printf ( "%d consistent quadruplets, %d triplets ", match4, match3);
 		count1++;
 	      }
 	  }
-printf("unused inside = %d\n",count1);
+printf("unidentified objects = %d\n",count1);
   }
 
 // fill globals for cython postprocessing
@@ -400,6 +393,6 @@ match1_g=match1;
 
   free (con0);
 
-  printf ("Correspondences done");
+  printf ("End of correspondences_4, done \n ");
 }
 

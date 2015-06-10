@@ -13,7 +13,7 @@ Development workflow
 
 This is absolutely not a comprehensive guide of git development, and it is only an indication of our workflow.
 
-1. Download and install git. Instruction can be found `here <https://help.github.com/articles/set-up-git>`_.
+1. Download and install ```git```. Instruction can be found `here <https://help.github.com/articles/set-up-git>`_.
 2. Set up a github account.
 3. Clone OpenPTV repositories using::
 

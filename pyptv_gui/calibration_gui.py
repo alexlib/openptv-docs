@@ -231,12 +231,17 @@ class plot_window (HasTraits):
                 self._plot.overlays[i].alternate_position=(coord_x1,coord_y1)
     
     def plot_num_overlay(self,x,y,txt):
-        for i in range (0,len(x)):
-            coord_x, coord_y=self._plot.map_screen([(x[i],y[i])])[0]
-            ovlay=TextBoxOverlay(component=self._plot, text=str(txt[i]), \
-            alternate_position=(coord_x,coord_y),real_position=(x[i],y[i]),\
-            text_color = "red", border_color = "red")
-            self._plot.overlays.append(ovlay)
+            
+            for i in range (0,len(x)):
+                    coord_x, coord_y=self._plot.map_screen([(x[i],y[i])])[0]
+                    ovlay=TextBoxOverlay(component=self._plot, 
+                    text=str(txt[i]),
+                    alternate_position=(coord_x,coord_y), 
+                    real_position=(x[i],y[i]),
+                    text_color = "white",
+                    border_color = "red"
+                    )
+                    self._plot.overlays.append(ovlay)
                     
     def update_image(self,image,is_float):
             if is_float:
@@ -437,11 +442,15 @@ class calibration_gui(HasTraits):
         x1_cyan=[]
         y1_cyan=[]
         pnr=[]
-        # import pdb; pdb.set_trace()
         self.ptv.py_get_from_sortgrid(x,y,pnr)
-        x = [[i for i in x[0] if i > 0]]
-        y = [[i for i in y[0] if i > 0]]
-        self.drawcross("sort_x","sort_y",x,y,"red",4)
+        # filter out -999 which is returned for the missing points:
+        while -999 in x[0]:
+            id = x[0].index(-999)
+            del x[0][id]
+            del y[0][id]
+            del pnr[0][id]
+
+        self.drawcross("sort_x","sort_y",x,y,"white",4)
         self.ptv.py_get_from_calib(x1_cyan,y1_cyan)
         self.drawcross("init_x","init_y",x1_cyan,y1_cyan,"cyan",4)
         for i in range (len(self.camera)):

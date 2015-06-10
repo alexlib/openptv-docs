@@ -12,28 +12,31 @@ OpenPTV documentation
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    intro
    installation_instruction
+   
    tutorial
+   add_doc
+   
    developers
    howto
-   benchmark
-   projects
-   add_doc
-   add_soft
    gui_doc
-   downloads_page
-
+   add_soft
    
 
-   
+
 API:
 
 .. toctree::
    :maxdepth: 2
 
+{% if not READTHEDOCS %}
+   code
+{% endif %}
+   api_reference
+   downloads_page
    
 
    

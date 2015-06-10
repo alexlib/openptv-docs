@@ -169,21 +169,27 @@ volume_par *vpar;
   
 //Beat Mai 2010 for dumbbell
 
-    if (dumbbell_pyptv==1){    dumbbell=1;
-  }
+    if (dumbbell_pyptv==1) dumbbell=1;
 
   if (dumbbell==0){
 	
+	/* I overwrite this change using the old version of tol_band_width to be just the 
+	value in millimeters given by the user in the main parameters/observation volume */
+	
 	  /////here is new Beat version of April 2010
+	  /*
 	  if (nx>ny) particle_size=nx;
 	  else       particle_size=ny;
 	  tol_band_width = vpar->eps0*0.5*(pix_x + pix_y)*particle_size;
+	  */
+	  
+	  tol_band_width = vpar->eps0;
   }
   else{
       tol_band_width = vpar->eps0;
   }
-  if(tol_band_width<0.05){
-       tol_band_width=0.05;
+  if(tol_band_width <= 0){
+       tol_band_width = 1e-6;
   }
 
   /* define sensor format for search interrupt */
@@ -319,9 +325,8 @@ candidate	cand[];
   correct_brown_affin (xmin,ymin, ap[i12], &xmin,&ymin);
   correct_brown_affin (xmax,ymax, ap[i12], &xmax,&ymax);
 
-  if (nx>ny) particle_size=nx;
-  else       particle_size=ny;
-  tol_band_width = vpar->eps0*0.5*(pix_x + pix_y)*particle_size;
+  /* see the note in the find_candidate_plus about overwriting the tol_band_width definition */
+  tol_band_width = vpar->eps0;
 
   for (j=0; j<4; j++)
     {
@@ -386,7 +391,7 @@ candidate	cand[];
 			  cand[*count].tol = d;
  			  cand[*count].corr = corr;
 			  (*count)++;
-			  printf ("%d %3.0f/%3.1f \n", p2, corr, d*1000);
+			  printf ("candidates: pnt: %d corr:%3.0f epi-dist:%3.1f \n", p2, corr, d*1000);
 			}
 		    }
 		}

@@ -59,7 +59,7 @@ This is only a quick and dirty explication about what are the major challenges o
 
 
 New Optical Image Splitter
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Optical Image Splitter**
 
 *What is it?*
