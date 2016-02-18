@@ -139,8 +139,6 @@ void prepare_eval_shake(control_par *cpar) {
         read_frame(&frm, "res/rt_is", "res/ptv_is", NULL,
             seq_par->img_base_name, filenumber);
         
-        printf("read frame %d\n", filenumber);
-        printf("found %d particles \n", frm.num_parts);
 
         for (i = 0; i < frm.num_parts; i++) {
             if ((frm.path_info[i].prev == PREV_NONE) || \
@@ -737,8 +735,6 @@ int         *num_used;  /* Number of points used for orientation */
       }
       y[i] = 0.0;  P[i] = 0.0;
     }
-
-   printf("\n Memory is initialized, \n");
 
   /* init identities */
   ident[0] = I0.cc;  ident[1] = I0.xh;  ident[2] = I0.yh;
