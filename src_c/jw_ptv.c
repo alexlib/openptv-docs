@@ -137,18 +137,26 @@ int init_proc_c()
     
     fpp = fopen ("parameters/pft_version.par", "r");
     if (!fpp){
+        printf(" \n Couldn't open parameters/pft_version.par\n");
         fpp = fopen ("parameters/pft_version.par", "w");
         fprintf(fpp,"%d\n", 0);
         fclose(fpp);
     }
     
+    printf(" \n parameters/pft_version.par has been processed\n");
+    
     /*  read from main parameter file  */
     cpar = read_control_par("parameters/ptv.par");
     cpar->mm->nlay = 1;
     
-    for (i=0; i<4; i++)
+    printf(" \n parameters/ptv.par has been read to cpar structure\n");
+    
+    
+    for (i=0; i<cpar->num_cams; i++)
     {
+        printf(" cal_img_base_name = %s\n", cpar->cal_img_base_name[i]);
         strncpy(img_cal[i], cpar->cal_img_base_name[i], 128);
+        printf(" copied to img_cal %s\n", img_cal[i]);
     }
     
     /* read illuminated layer data */
@@ -226,7 +234,7 @@ int start_proc_c()
     cpar = read_control_par("parameters/ptv.par");
     cpar->mm->nlay = 1;
     
-    for (i=0; i<4; i++)
+    for (i=0; i<cpar->num_cams; i++)
     {
         strncpy(img_cal[i], cpar->cal_img_base_name[i], 128);
     }
