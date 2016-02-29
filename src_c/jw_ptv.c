@@ -535,7 +535,7 @@ int calibration_proc_c (int sel)
     
     fp1 = fopen_r ("parameters/cal_ori.par");
     fscanf (fp1,"%s\n", fixp_name);
-    for (i=0; i<4; i++)
+    for (i=0; i<cpar->num_cams; i++)
 	{
         fscanf (fp1, "%s\n", img_name[i]);
         fscanf (fp1, "%s\n", img_ori0[i]);
