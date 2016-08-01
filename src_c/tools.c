@@ -306,8 +306,8 @@ int    	left, right;
 void quicksort_con (con, num)
 n_tupel	*con;
 int    	num;
-{
-  qs_con (con, 0, num-1);
+{ 
+  if (num > 0) qs_con (con, 0, num-1);
 }
 
 
