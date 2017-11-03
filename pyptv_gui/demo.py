@@ -1,3 +1,7 @@
+from __future__ import division
+from __future__ import print_function
+from builtins import range
+from past.utils import old_div
 from traits.api import HasTraits, Str, Float, Int,  Instance, Button,  Any, List, Bool
 from traitsui.api import Item, View
 from enable.component_editor import ComponentEditor
@@ -66,7 +70,7 @@ class DemoWindow (HasTraits):
             self._plot_data.set_data('imagedata', image)
 
         if not hasattr(self, '_img_plot'):  # make a new plot if there is nothing to update
-            print "inside 1"
+            print("inside 1")
             # self._img_plot=Instance(ImagePlot)
             self._img_plot = self._plot.img_plot('imagedata', colormap=gray)[0]
             # self.attach_tools()
@@ -77,7 +81,7 @@ class DemoWindow (HasTraits):
 class DemoThread(Thread):
 
     def run(self):
-        print "starting thread"
+        print("starting thread")
         seq_first = self.seq_first
         seq_last = self.seq_last
         base_name = self.base_name
@@ -95,13 +99,13 @@ class DemoThread(Thread):
             self.can_continue = False
             for j in range(self.n_camera):
                 img_name = base_name[j] + seq_ch
-                print ("Setting image: ", img_name)
+                print(("Setting image: ", img_name))
                 try:
                     img = imread(img_name).astype(np.float)
                     self.temp_img[-1].append(imresize(img, 0.5))
                 except:
-                    print "Error reading file"
-        print "Thread finished"
+                    print("Error reading file")
+        print("Thread finished")
 #           self.DemoGUI._update_thread_plot_changed()
 #               self.DemoGUI.camera_list[j]._plot.request_redraw()
 
@@ -112,7 +116,7 @@ class DemoThread(Thread):
 #               #self.camera_list[j].update_image(temp_img,is_float=1)
 #
 
-        print "tracking with display thread finished"
+        print("tracking with display thread finished")
 
 
 class DemoGUI (HasTraits):
@@ -135,13 +139,13 @@ class DemoGUI (HasTraits):
         self.exp1 = exp1
         self.ptv1 = ptv
         self.n_camera = self.exp1.active_params.m_params.Num_Cam
-        print self.n_camera
+        print(self.n_camera)
         self.orig_image = []
         self.hp_image = []
         if self.n_camera == 1:
             shape = (1, 1)
         else:
-            shape = (2, int(self.n_camera / 2))
+            shape = (2, int(old_div(self.n_camera, 2)))
         self.container = GridPlotContainer(shape=shape)
 
         for i in range(self.n_camera):
@@ -160,7 +164,7 @@ class DemoGUI (HasTraits):
         for i in range(self.n_camera):
             exec(
                 "base_name.append(self.exp1.active_params.m_params.Basename_%d_Seq)" % (i + 1))
-            print base_name[i]
+            print(base_name[i])
         self.tr_thread.base_name = base_name
         self.tr_thread.start()
         while (self.tr_thread and (self.tr_thread.isAlive() or len(self.tr_thread.temp_img) > 0)):

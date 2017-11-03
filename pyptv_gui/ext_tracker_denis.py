@@ -1,4 +1,7 @@
-class Tracking():
+from __future__ import print_function
+from builtins import range
+from builtins import object
+class Tracking(object):
     """ Tracking class defines external tracking addon for pyptv
     User needs to implement the following functions:
             do_tracking(self)
@@ -16,11 +19,11 @@ class Tracking():
     def do_tracking(self):
         """ this function is callback for "tracking without display"
         """
-        print "inside denis_ext_tracker"
+        print("inside denis_ext_tracker")
         run_info = self.ptv.py_trackcorr_init()
-        print run_info.get_sequence_range()
+        print(run_info.get_sequence_range())
         for step in range(*run_info.get_sequence_range()):
-            print step
+            print(step)
             self.ptv.py_trackcorr_loop(run_info, step, display=0)
             # finalize tracking
         self.ptv.py_trackcorr_finish(run_info, step + 1)
@@ -29,4 +32,4 @@ class Tracking():
         """ this function is callback for "tracking back"
         """
         # do your back_tracking stuff here
-        print "inside custom back tracking"
+        print("inside custom back tracking")

@@ -1,7 +1,10 @@
+from __future__ import print_function
+from __future__ import absolute_import
 # TODO: check if OrientParams should contain Bools or Ints
 # TODO: change set() functions to either have no default values, or have
 # None value signify 'no change to parameter'.
 
+from builtins import range
 import os
 import sys
 import traceback
@@ -56,13 +59,13 @@ class Parameters(HasTraits):
 
 # Print detailed error to the console and show the user a friendly error window
 def error(owner, msg):
-    print "Exception caught, message: %s" % (msg)
+    print("Exception caught, message: %s" % (msg))
     general.printException()
     pyfaceapi.error(owner, msg)
 
 
 def warning(msg):
-    print "Warning message: %s" % (msg)
+    print("Warning message: %s" % (msg))
 
 
 # Reads a parameters directory and returns a dictionary with all parameter
@@ -89,7 +92,7 @@ def readParamsDir(par_path):
            ShakingParams: ShakingParams(path=par_path)
            }
 
-    for parType in ret.keys():
+    for parType in list(ret.keys()):
         if parType == PtvParams:
             continue
         parObj = ret[parType]
@@ -104,7 +107,7 @@ def copy_params_dir(src, dest):
     files = [f for f in os.listdir(src) if f.endswith('.par')]
     if not os.path.exists(dest):
         os.mkdir(dest)
-    print "copy from %s to %s" % (src, dest)
+    print("copy from %s to %s" % (src, dest))
     for f in files:
         shutil.copyfile(os.path.abspath(os.path.join(src, f)),
                         os.path.abspath(os.path.join(dest, f)))

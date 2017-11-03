@@ -1,4 +1,6 @@
+from __future__ import division
 
+from past.utils import old_div
 from numpy import array, compress, matrix, newaxis, sqrt, zeros, transpose, invert, abs, argmin, around,  asarray, isnan, \
     sum, where
 
@@ -103,7 +105,7 @@ class QuiverPlot(ScatterPlot):
 
         if self.arrow_size > 0:
             vec = self._cached_vector_data
-            unit_vec = vec / sqrt(vec[:, 0] ** 2 + vec[:, 1] ** 2)[:, newaxis]
+            unit_vec = old_div(vec, sqrt(vec[:, 0] ** 2 + vec[:, 1] ** 2)[:, newaxis])
             a = 0.707106781	  # sqrt(2)/2
 
             # Draw the left arrowhead (for an arrow pointing straight up)

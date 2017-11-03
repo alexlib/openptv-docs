@@ -3,7 +3,9 @@ This file uses Python nose to test the correctness of writing and reading parame
 To run the test, 'parameters' directory should exists in the 'tests' directory with all .par files (with the correct names).
 The parameters directory is iterated, and .par files are read (using the suitable param classes). Then they are written back, and the files are compared.
 """
+from __future__ import print_function
 
+from builtins import range
 import sys, os
 sys.path += ['..']
 import parameters
@@ -73,7 +75,7 @@ def testReadWrite():
 def checkSingleParamFile(paramfile, n_img, n_pts):
 	params = paramsFactory(paramfile, n_img, n_pts)
 	if params is None:
-		print "No parameters class found for file %s." % (paramfile)
+		print("No parameters class found for file %s." % (paramfile))
 		assert False
 		return
 	
@@ -82,7 +84,7 @@ def checkSingleParamFile(paramfile, n_img, n_pts):
 	try:
 		params.read()
 	except:
-		print "Error reading %s from %s:" % (paramfile, params.path), sys.exc_info()
+		print("Error reading %s from %s:" % (paramfile, params.path), sys.exc_info())
 		assert False
 	
 	params.path = testParamsDir
@@ -90,7 +92,7 @@ def checkSingleParamFile(paramfile, n_img, n_pts):
 	try:
 		params.write()
 	except:
-		print "Error writing %s to %s:" % (paramfile, params.path), sys.exc_info()
+		print("Error writing %s to %s:" % (paramfile, params.path), sys.exc_info())
 		assert False
 
 	if not compareFiles(referenceFile, testFile, True):
@@ -103,7 +105,7 @@ def compareFiles(f1, f2, verbose = False):
 	lns2 = readlines(f2)
 	
 	def getLen(lns):
-		for i in reversed(range(len(lns))):
+		for i in reversed(list(range(len(lns)))):
 			if lns[i].strip() != '':
 				return i
 		return 0
@@ -112,7 +114,7 @@ def compareFiles(f1, f2, verbose = False):
 	nlns2 = getLen(lns2)
 	if nlns1 != nlns2:
 		if verbose:
-			print "Files %s and %s have different amount of lines (%d/%d)." % (f1, f2, nlns1, nlns2)
+			print("Files %s and %s have different amount of lines (%d/%d)." % (f1, f2, nlns1, nlns2))
 		return False
 		
 	for n in range(nlns1):
@@ -124,7 +126,7 @@ def compareFiles(f1, f2, verbose = False):
 					raise					
 			except:
 				if verbose:
-					print "Files %s and %s differ at line %d (%s/%s)" % (f1, f2, n+1, l1, l2)
+					print("Files %s and %s differ at line %d (%s/%s)" % (f1, f2, n+1, l1, l2))
 				return False
 	return True
 	

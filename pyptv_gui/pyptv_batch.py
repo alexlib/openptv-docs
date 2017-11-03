@@ -9,6 +9,8 @@ the present "active" parameters are kept intact except the sequence
 
 
 """
+from __future__ import print_function
+from __future__ import absolute_import
 
 
 # from scipy.misc import imread
@@ -17,8 +19,8 @@ import sys
 import numpy as np
 
 # project specific inputs
-import parameters as par
-import general
+from . import parameters as par
+from . import general
 
 import time
 
@@ -47,7 +49,7 @@ def sequence_tracking(n_img):
     stepshake = ptv.py_get_from_sequence_init()
     if not stepshake:
         stepshake = 1
-    print stepshake
+    print(stepshake)
     temp_img = np.array([], dtype=np.ubyte)
     for i in range(seq_first, seq_last + 1, stepshake):
         if i < 10:
@@ -58,11 +60,11 @@ def sequence_tracking(n_img):
             seq_ch = "%03d" % i
         for j in range(n_img):
             img_name = base_name[j] + seq_ch
-            print ("Setting image: ", img_name)
+            print(("Setting image: ", img_name))
             try:
                 temp_img = imread(img_name).astype(np.ubyte)
             except:
-                print "Error reading file"
+                raise ValueError("Error reading file")
 
             ptv.py_set_img(temp_img, j)
 
@@ -71,16 +73,16 @@ def sequence_tracking(n_img):
 
 #	forward tracking
     run_info = ptv.py_trackcorr_init()
-    print run_info.get_sequence_range()
+    print(run_info.get_sequence_range())
     for step in range(*run_info.get_sequence_range()):
-        print step
+        print(step)
         ptv.py_trackcorr_loop(run_info, step, display=0)
 
     ptv.py_trackcorr_finish(run_info, step + 1)
-    print "tracking without display finished"
+    print("tracking without display finished")
     # RON - cancled back tracking due to bug 
     ptv.py_trackback_c()
-    print "tracking backwards is finished"
+    print("tracking backwards is finished")
 
 
 def sequence(n_img):
@@ -99,7 +101,7 @@ def sequence(n_img):
     stepshake = ptv.py_get_from_sequence_init()
     if not stepshake:
         stepshake = 1
-    print stepshake
+    print(stepshake)
     temp_img = np.array([], dtype=np.ubyte)
     for i in range(seq_first, seq_last + 1, stepshake):
         if i < 10:
@@ -110,11 +112,11 @@ def sequence(n_img):
             seq_ch = "%03d" % i
         for j in range(n_img):
             img_name = base_name[j] + seq_ch
-            print ("Setting image: ", img_name)
+            print(("Setting image: ", img_name))
             try:
                 temp_img = imread(img_name).astype(np.ubyte)
             except:
-                print "Error reading file"
+                print ("Error reading file")
 
             ptv.py_set_img(temp_img, j)
 
@@ -159,7 +161,7 @@ def main(sys_argv, repetitions=1):
         repetitions : int, default = 1, optional
     """
     software_path = os.path.split(os.path.abspath(sys_argv[0]))[0]
-    print 'software_path=', software_path
+    print(('software_path='), software_path)
     
     try:
         os.chdir(software_path)
@@ -186,7 +188,7 @@ def main(sys_argv, repetitions=1):
 # RON - make a res dir if it not found
 
     if 'res' not in os.listdir(sys_argv[1]):
-        print " 'res' folder not found. creating one"
+        print (" 'res' folder not found. creating one")
         os.makedirs(os.path.join(sys_argv[1],'res'))
     
     
@@ -205,12 +207,12 @@ def main(sys_argv, repetitions=1):
             general.printException()
 
     end = time.time()
-    print 'time lapsed %f sec' % (end - start)
+    print ('time lapsed %f sec' % (end - start))
     
 
 
 if __name__ == '__main__':
-""" pyptv_batch.py enables to run a sequence without GUI
+    """ pyptv_batch.py enables to run a sequence without GUI
     It can run from a command shell: 
         python pyptv_batch.py ~/test_cavity 10000 10004
     
@@ -223,7 +225,7 @@ if __name__ == '__main__':
         PyPTV_working_directory = '/openptv/Working_folder/'
         mi,mx = 65119, 66217
         main([batch_command,PyPTV_working_directory, mi, mx])
-"""
+        """
     if len(sys.argv) < 4:
         print("Wrong number of inputs, usage: python pyptv_batch.py \
         experiments/exp1 seq_first seq_last")

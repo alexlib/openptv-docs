@@ -1,6 +1,7 @@
 # Regression tests for the post-processing tests: sequencing, tracking, tracking 
 # back, etc.
 
+from builtins import range
 import unittest
 import os, shutil, glob, re, sys
 
@@ -70,8 +71,8 @@ class TestProcessing(unittest.TestCase):
         py_start_proc_c()
         py_sequence_init(0)
         
-        for frame in xrange(497, 598):
-            for cam in xrange(4):
+        for frame in range(497, 598):
+            for cam in range(4):
                 img = imread(
                     "scene83_event1/cam%d_Scene83_%04d" % (cam + 1, frame))
                 py_set_img(img, cam)

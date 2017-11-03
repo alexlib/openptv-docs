@@ -4,6 +4,10 @@ Copyright (c) 2013 - the OpenPTV team
 The software is distributed under the terms of MIT-like license
 http://opensource.org/licenses/MIT
 """
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import str
+from builtins import range
 from traits.api \
     import HasTraits, Str, Int, List, Bool, Instance, Button
 from traitsui.api \
@@ -55,8 +59,8 @@ class clicker_tool(ImageInspectorTool):
             image_data = plot.value
             self.x = (x_index)
             self.y = (y_index)
-            print self.x
-            print self.y
+            print(self.x)
+            print(self.y)
             self.left_changed = 1 - self.left_changed
             self.last_mouse_position = (event.x, event.y)
 
@@ -71,8 +75,8 @@ class clicker_tool(ImageInspectorTool):
             self.y = (y_index)
 
             self.right_changed = 1 - self.right_changed
-            print self.x
-            print self.y
+            print(self.x)
+            print(self.y)
 
             self.last_mouse_position = (event.x, event.y)
 
@@ -117,8 +121,8 @@ class plot_window (HasTraits):
         if len(self._x) < 4:
             self._x.append(self._click_tool.x)
             self._y.append(self._click_tool.y)
-        print self._x
-        print self._y
+        print(self._x)
+        print(self._y)
         self.drawcross("coord_x", "coord_y", self._x, self._y, "red", 5)
         self._plot.overlays = []
         self.plot_num_overlay(self._x, self._y, self.man_ori)
@@ -128,14 +132,14 @@ class plot_window (HasTraits):
         if len(self._x) > 0:
             self._x.pop()
             self._y.pop()
-            print self._x
-            print self._y
+            print(self._x)
+            print(self._y)
             self.drawcross("coord_x", "coord_y", self._x, self._y, "red", 5)
             self._plot.overlays = []
             self.plot_num_overlay(self._x, self._y, self.man_ori)
         else:
             if (self._right_click_avail):
-                print "deleting point"
+                print("deleting point")
                 self.py_rclick_delete(self._click_tool.x,
                                       self._click_tool.y, self.cameraN)
                 x = []
@@ -385,8 +389,8 @@ class calibration_gui(HasTraits):
         points_set = True
         for i in range(len(self.camera)):
             if len(self.camera[i]._x) < 4:
-                print "inside manual click"
-                print self.camera[i]._x
+                print("inside manual click")
+                print(self.camera[i]._x)
                 points_set = False
 
         if points_set:
@@ -547,19 +551,19 @@ class calibration_gui(HasTraits):
         self.status_text = "Orientation with particles finished."
 
     def _button_orient_dumbbell_fired(self):
-        print "Starting orientation from dumbbell"
+        print("Starting orientation from dumbbell")
         self.backup_ori_files()
         self.ptv.py_ptv_set_dumbbell(1)
         n_camera = len(self.camera)
         print ("Starting sequence action")
         seq_first = self.exp1.active_params.m_params.Seq_First
         seq_last = self.exp1.active_params.m_params.Seq_Last
-        print seq_first, seq_last
+        print(seq_first, seq_last)
         base_name = []
         for i in range(n_camera):
             exec(
                 "base_name.append(self.exp1.active_params.m_params.Basename_%d_Seq)" % (i + 1))
-            print base_name[i]
+            print(base_name[i])
             self.ptv.py_sequence_init(1)
             stepshake = self.ptv.py_get_from_sequence_init()
             if not stepshake:
@@ -568,23 +572,23 @@ class calibration_gui(HasTraits):
         temp_img = np.array([], dtype=np.ubyte)
         for i in range(seq_first, seq_last + 1, stepshake):
             seq_ch = "%04d" % i
-            print seq_ch
+            print(seq_ch)
             for j in range(n_camera):
                 print ("j %d" % j)
                 img_name = base_name[j] + seq_ch
-                print ("Setting image: ", img_name)
+                print(("Setting image: ", img_name))
                 try:
                     temp_img = imread(img_name).astype(np.ubyte)
                 except:
-                    print "Error reading file"
+                    print("Error reading file")
                     self.ptv.py_set_img(temp_img, j)
 
             self.ptv.py_sequence_loop(1, i)
 
-        print "Orientation from dumbbell - sequence finished"
+        print("Orientation from dumbbell - sequence finished")
         self.ptv.py_calibration(12)
         self.ptv.py_ptv_set_dumbbell(1)
-        print "Orientation from dumbbell finished"
+        print("Orientation from dumbbell finished")
 
     def _button_restore_orient_fired(self):
         self.restore_ori_files()
@@ -612,7 +616,7 @@ class calibration_gui(HasTraits):
             print ("reading " + self.ori_img_name[i])
             try:
                 img1 = imread(self.ori_img_name[i], flatten=1).astype(np.ubyte)
-                print img1.shape
+                print(img1.shape)
             except:
                 print("Error reading image " + self.ori_img_name[i])
                 break
@@ -636,7 +640,7 @@ class calibration_gui(HasTraits):
     def reset_plots(self):
         for i in range(len(self.camera)):
             self.camera[i]._plot.delplot(
-                *self.camera[i]._plot.plots.keys()[0:])
+                *list(self.camera[i]._plot.plots.keys())[0:])
             self.camera[i]._plot.overlays = []
             for j in range(len(self.camera[i]._quiverplots)):
                 self.camera[i]._plot.remove(self.camera[i]._quiverplots[j])
@@ -645,7 +649,7 @@ class calibration_gui(HasTraits):
     def reset_show_images(self):
         for i in range(len(self.camera)):
             self.camera[i]._plot.delplot(
-                *self.camera[i]._plot.plots.keys()[0:])
+                *list(self.camera[i]._plot.plots.keys())[0:])
             self.camera[i]._plot.overlays = []
             # self.camera[i]._plot_data.set_data('imagedata',self.ori_img[i].astype(np.byte))
             self.camera[i]._plot_data.set_data(
@@ -685,7 +689,7 @@ class calibration_gui(HasTraits):
         calOriParams.read()
 
         for f in calOriParams.img_ori:
-            print "restored %s " % f
+            print("restored %s " % f)
             shutil.copyfile(f + '.bck', f)
             g = f.replace('ori', 'addpar')
             shutil.copyfile(g + '.bck', g)
@@ -697,7 +701,7 @@ class calibration_gui(HasTraits):
         for f in calOriParams.img_ori:
             d = file(f, 'r').read().split()
             if not np.all(np.isfinite(np.asarray(d).astype('f'))):
-                print "protected ORI file %s " % f
+                print("protected ORI file %s " % f)
                 shutil.copyfile(f + '.bck', f)
 
     def load_init(self):
@@ -717,7 +721,7 @@ class calibration_gui(HasTraits):
             self.ori_img.append(img1)
             if self.camera[i]._plot is not None:
                 self.camera[i]._plot.delplot(
-                    *self.camera[i]._plot.plots.keys()[0:])
+                    *list(self.camera[i]._plot.plots.keys())[0:])
             self.camera[i]._plot_data.set_data(
                 'imagedata', self.ori_img[i].astype(np.byte))
             self.camera[i]._img_plot = self.camera[
