@@ -674,7 +674,7 @@ class calibration_gui(HasTraits):
         # backup ORI/ADDPAR files to the backup_cal directory
         calOriParams = par.CalOriParams(len(self.camera), path=self.par_path)
         calOriParams.read()
-        for f in calOriParams.img_ori:
+        for f in calOriParams.img_ori[:len(self.camera)]:
             shutil.copyfile(f, f + '.bck')
             g = f.replace('ori', 'addpar')
             shutil.copyfile(g, g + '.bck')
@@ -684,7 +684,7 @@ class calibration_gui(HasTraits):
         calOriParams = par.CalOriParams(len(self.camera), path=self.par_path)
         calOriParams.read()
 
-        for f in calOriParams.img_ori:
+        for f in calOriParams.img_ori[:len(self.camera)]:
             print "restored %s " % f
             shutil.copyfile(f + '.bck', f)
             g = f.replace('ori', 'addpar')
@@ -694,7 +694,7 @@ class calibration_gui(HasTraits):
         # backup ORI/ADDPAR files to the backup_cal directory
         calOriParams = par.CalOriParams(len(self.camera), path=self.par_path)
         calOriParams.read()
-        for f in calOriParams.img_ori:
+        for f in calOriParams.img_ori[:len(self.camera)]:
             d = file(f, 'r').read().split()
             if not np.all(np.isfinite(np.asarray(d).astype('f'))):
                 print "protected ORI file %s " % f
