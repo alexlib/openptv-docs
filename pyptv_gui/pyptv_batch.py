@@ -113,9 +113,8 @@ def run_batch(new_seq_first, new_seq_last):
             detections, corrected, cals, vpar, cpar)
         
         # Save targets only after they've been modified:
-        detection_template = spar.get_img_base_name(i_cam)
         for i in xrange(n_cams):
-            detections[i].write(+'_targets',frame)
+            detections[i].write(spar.get_img_base_name(i_cam)+'%d'+'_targets',frame)
         
 
         print "Frame " + str(frame) + " had " \
@@ -140,7 +139,7 @@ def run_batch(new_seq_first, new_seq_last):
  # end of a sequence loop   
     
     
-    tracker = Tracker(cpar, vpar, tpar, spar, cals, default_naming)
+    tracker = Tracker(cpar, vpar, track_par, spar, cals, default_naming)
     tracker.full_forward()
 #    
     
