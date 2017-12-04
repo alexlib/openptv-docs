@@ -18,14 +18,11 @@ import numpy as np
 from skimage.io import imread
 
 # project specific inputs
-import parameters as par
-import general
 
 import time
 
 
-# directory from which we run the software
-cwd = os.getcwd()
+
 
 
 # import pdb; pdb.set_trace()
@@ -34,11 +31,12 @@ from optv.correspondences import correspondences, MatchedCoords
 from optv.segmentation import target_recognition
 from optv.orientation import point_positions
 from optv.image_processing import preprocess_image
-from optv.tracking_framebuf import CORRES_NONE
-from optv.tracker import Tracker
+#from optv.tracking_framebuf import CORRES_NONE
+from optv.tracker import Tracker, default_naming
 from optv.calibration import Calibration
 from optv.parameters import ControlParams, VolumeParams, TrackingParams, \
-    SequenceParams
+    SequenceParams, TargetParams
+    
 
 def simple_highpass(img, cpar):
     return preprocess_image(img, 0, cpar, 12)
@@ -72,18 +70,27 @@ def run_batch(new_seq_first, new_seq_last):
     vpar = VolumeParams()
     vpar.read_volume_par('parameters/criteria.par')
     
+    # Tracking parameters
+    track_par = TrackingParams()
+    track_par.read_track_par('parameters/track.par')
+    
     # Target parameters
-    tpar = TrackingParams()
-    tpar.read_track_par('parameters/track.par')
+    tpar = TargetParams()
+    tpar.read('parameters/targ_rec.par')
+    
+    # 
     
     # Calibration parameters
+    
     cals =[]
     for i in xrange(n_cams):
         cal = Calibration()
-        cals.append(cal.from_file(ori_file, addpar_file))
+        tmp = cpar.get_cal_img_base_name(i)
+        cal.from_file(tmp+'.ori', tmp+'.addpar')
+        cals.append(cal)
     
     
-    # sequence
+    # sequence loop for all frames
     for frame in xrange(new_seq_first, new_seq_last+1):
         print "processing frame %d" % frame
         
@@ -106,49 +113,36 @@ def run_batch(new_seq_first, new_seq_last):
             detections, corrected, cals, vpar, cpar)
         
         # Save targets only after they've been modified:
+        detection_template = spar.get_img_base_name(i_cam)
         for i in xrange(n_cams):
-            detections[i].write(imname+'_targets')
+            detections[i].write(+'_targets',frame)
         
-        if self._report:
-            print "Frame " + str(frame) + " had " \
-            + repr([s.shape[1] for s in sets]) + " correspondences."
+
+        print "Frame " + str(frame) + " had " \
+        + repr([s.shape[1] for s in sets]) + " correspondences."
         
         # Distinction between quad/trip irrelevant here.
         sets = np.concatenate(sets, axis=1)
         corresp = np.concatenate(corresp, axis=1)
         
-        flat = np.array([corrected[cix].get_by_pnrs(corresp[cix]) \
-            for cix in xrange(len(self._cals))])
+        flat = np.array([corrected[i].get_by_pnrs(corresp[i]) \
+            for i in xrange(len(cals))])
         pos, rcm = point_positions(
-            flat.transpose(1,0,2), self._cpar, self._cals)
+            flat.transpose(1,0,2), cpar, cals)
         
         # Save rt_is
-        rt_is = open(seq['output_template'].format(frame=frame), 'w')
+        rt_is = open(default_naming['corres']+'.'+str(frame), 'w')
         rt_is.write(str(pos.shape[0]) + '\n')
         for pix, pt in enumerate(pos):
             pt_args = (pix + 1,) + tuple(pt) + tuple(corresp[:,pix])
             rt_is.write("%4d %9.3f %9.3f %9.3f %4d %4d %4d %4d\n" % pt_args)
         rt_is.close()
+ # end of a sequence loop   
     
     
-    # tracker
-    cals = []
-    img_base = []
-    for cix, cam_spec in enumerate(yaml_conf['cameras']):
-        cam_spec.setdefault('addpar_file', None)
-        cal = Calibration()
-        cal.from_file(cam_spec['ori_file'], cam_spec['addpar_file'])
-        cals.append(cal)
-        img_base.append(seq_cfg['targets_template'].format(cam=cix + 1))
-        
-
-    
-    tracker = Tracker(cpar, vpar, tpar, spar, cals, framebuf_naming)
+    tracker = Tracker(cpar, vpar, tpar, spar, cals, default_naming)
     tracker.full_forward()
-    
-
-
-
+#    
     
 def main(sys_argv, repetitions=1):
     """ runs the batch 
@@ -170,10 +164,10 @@ def main(sys_argv, repetitions=1):
     except:
         raise ValueError("Error in instalation or software path")
     
-    import string
-    src_path = string.replace(software_path,'pyptv_gui','src_c')
-    print('Source path for ptv1.so is %s' % src_path)
-    sys.path.append(src_path)
+#    import string
+#    src_path = string.replace(software_path,'pyptv_gui','src_c')
+#    print('Source path for ptv1.so is %s' % src_path)
+#    sys.path.append(src_path)
     
     start = time.time()
     
@@ -204,8 +198,7 @@ def main(sys_argv, repetitions=1):
         try:
             run_batch(seq_first, seq_last)
         except:
-            print("something wrong with the software or folder")
-            general.printException()
+            print("something wrong with the batch or the folder")
 
     end = time.time()
     print 'time lapsed %f sec' % (end - start)
@@ -227,6 +220,8 @@ if __name__ == '__main__':
         mi,mx = 65119, 66217
         main([batch_command,PyPTV_working_directory, mi, mx])
         """
+        # directory from which we run the software
+
     if len(sys.argv) < 4:
         print("Wrong number of inputs, usage: python pyptv_batch.py \
         experiments/exp1 seq_first seq_last")
