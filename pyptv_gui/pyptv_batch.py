@@ -83,16 +83,16 @@ def run_batch(new_seq_first, new_seq_last):
     # Calibration parameters
     
     cals =[]
-    for i in xrange(n_cams):
+    for i_cam in xrange(n_cams):
         cal = Calibration()
-        tmp = cpar.get_cal_img_base_name(i)
+        tmp = cpar.get_cal_img_base_name(i_cam)
         cal.from_file(tmp+'.ori', tmp+'.addpar')
         cals.append(cal)
     
     
     # sequence loop for all frames
     for frame in xrange(new_seq_first, new_seq_last+1):
-        print "processing frame %d" % frame
+        print("processing frame %d" % frame)
         
         detections = []
         corrected = []
@@ -101,6 +101,7 @@ def run_batch(new_seq_first, new_seq_last):
             img = imread(imname)
             hp = simple_highpass(img, cpar)
             targs = target_recognition(hp, tpar, i_cam, cpar)
+        
             targs.sort_y()
             detections.append(targs)
             corrected.append(MatchedCoords(targs, cpar, cals[i_cam]))
@@ -113,12 +114,12 @@ def run_batch(new_seq_first, new_seq_last):
             detections, corrected, cals, vpar, cpar)
         
         # Save targets only after they've been modified:
-        for i in xrange(n_cams):
-            detections[i].write(spar.get_img_base_name(i_cam)+'%d'+'_targets',frame)
+        for i_cam in xrange(n_cams):
+            sets[i_cam].write(spar.get_img_base_name(i_cam),frame)
         
 
-        print "Frame " + str(frame) + " had " \
-        + repr([s.shape[1] for s in sets]) + " correspondences."
+        print("Frame " + str(frame) + " had " \
+        + repr([s.shape[1] for s in sets]) + " correspondences.")
         
         # Distinction between quad/trip irrelevant here.
         sets = np.concatenate(sets, axis=1)
@@ -156,17 +157,13 @@ def main(sys_argv, repetitions=1):
         repetitions : int, default = 1, optional
     """
     software_path = os.path.split(os.path.abspath(sys_argv[0]))[0]
-    print 'software_path=', software_path
+    print('software_path=', software_path)
     
     try:
         os.chdir(software_path)
     except:
         raise ValueError("Error in instalation or software path")
     
-#    import string
-#    src_path = string.replace(software_path,'pyptv_gui','src_c')
-#    print('Source path for ptv1.so is %s' % src_path)
-#    sys.path.append(src_path)
     
     start = time.time()
     
@@ -182,7 +179,7 @@ def main(sys_argv, repetitions=1):
 # RON - make a res dir if it not found
 
     if 'res' not in os.listdir(sys_argv[1]):
-        print " 'res' folder not found. creating one"
+        print(" 'res' folder not found. creating one")
         os.makedirs(os.path.join(sys_argv[1],'res'))
     
     
@@ -200,7 +197,7 @@ def main(sys_argv, repetitions=1):
             print("something wrong with the batch or the folder")
 
     end = time.time()
-    print 'time lapsed %f sec' % (end - start)
+    print('time lapsed %f sec' % (end - start))
     
 
 
