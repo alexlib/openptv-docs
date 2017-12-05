@@ -104,28 +104,32 @@ def run_batch(new_seq_first, new_seq_last):
         
             targs.sort_y()
             detections.append(targs)
-            corrected.append(MatchedCoords(targs, cpar, cals[i_cam]))
+            mc = MatchedCoords(targs, cpar, cals[i_cam])
+            pos, pnr = mc.as_arrays()
+            print((pos,pnr))
+            corrected.append(mc)
+
         
-        if any([len(det) == 0 for det in detections]):
-            return False
+#        if any([len(det) == 0 for det in detections]):
+#            return False
         
         # Corresp. + positions.
-        sets, corresp, _ = correspondences(
+        sorted_pos, sorted_corresp, num_targs = correspondences(
             detections, corrected, cals, vpar, cpar)
         
         # Save targets only after they've been modified:
         for i_cam in xrange(n_cams):
-            sets[i_cam].write(spar.get_img_base_name(i_cam),frame)
+            detections[i_cam].write(spar.get_img_base_name(i_cam),frame)
         
 
         print("Frame " + str(frame) + " had " \
-        + repr([s.shape[1] for s in sets]) + " correspondences.")
+        + repr([s.shape[1] for s in sorted_pos]) + " correspondences.")
         
         # Distinction between quad/trip irrelevant here.
-        sets = np.concatenate(sets, axis=1)
-        corresp = np.concatenate(corresp, axis=1)
+        sorted_pos = np.concatenate(sorted_pos, axis=1)
+        sorted_corresp = np.concatenate(sorted_corresp, axis=1)
         
-        flat = np.array([corrected[i].get_by_pnrs(corresp[i]) \
+        flat = np.array([corrected[i].get_by_pnrs(sorted_corresp[i]) \
             for i in xrange(len(cals))])
         pos, rcm = point_positions(
             flat.transpose(1,0,2), cpar, cals)
@@ -134,7 +138,7 @@ def run_batch(new_seq_first, new_seq_last):
         rt_is = open(default_naming['corres']+'.'+str(frame), 'w')
         rt_is.write(str(pos.shape[0]) + '\n')
         for pix, pt in enumerate(pos):
-            pt_args = (pix + 1,) + tuple(pt) + tuple(corresp[:,pix])
+            pt_args = (pix + 1,) + tuple(pt) + tuple(sorted_corresp[:,pix])
             rt_is.write("%4d %9.3f %9.3f %9.3f %4d %4d %4d %4d\n" % pt_args)
         rt_is.close()
  # end of a sequence loop   
@@ -192,6 +196,7 @@ def main(sys_argv, repetitions=1):
             seq_last = sys_argv[3]
        
         try:
+            print((seq_first,seq_last))
             run_batch(seq_first, seq_last)
         except:
             print("something wrong with the batch or the folder")
