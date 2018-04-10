@@ -42,7 +42,7 @@ Below are instructions for building it and making it ready for use, either from
 a source distribution (a tarball with all necessary files) or directly from a 
 Git repository. 
 
-Installing on Ubuntu or Mac OS X:
+Installing on Linux/Mac OS
 -----------------------------
 
 #. Create the directory that will contain everything::
@@ -65,13 +65,13 @@ Installing on Ubuntu or Mac OS X:
 
 	 sudo apt-get install git
 
-#. Install Canopy Python distribution (2 or higher), download from https://store.enthought.com/downloads/ - Python 2.7 version, follow their instructions, on http://docs.enthought.com/canopy/2.1/quick-start.html  (some version of Canopy 2.1 or higher) ::
+#. Install Anaconda (read their instructions, shall be straightforward) or Canopy Python distribution (Python 2.7) ::
 
         bash canopy_xxx.xxx.sh
 
 #. Run Canopy (either `~/Canopy/canopy` or `Applications -> Canopy`)
 
-#. Add scikit-image package through Canopy Package Manager
+#. Add `scikit-image` package through Canopy Package Manager
 
 #. Open Canopy Terminal through `Canopy -> Tools -> Canopy Terminal`
 
@@ -84,7 +84,12 @@ Installing on Ubuntu or Mac OS X:
 	 cmake ../ -G "Unix Makefiles"
 	 make
 	 make verify
+	 
+see that all tests passed and then: 
+
 	 sudo make install
+	 
+check that it's installed under `/usr/local/include` and `/usr/local/lib`
 
 #. Install Python bindings for the library (installs ```optv``` module)::
 
@@ -93,13 +98,15 @@ Installing on Ubuntu or Mac OS X:
 	python setup.py install
 	cd tests
 	nosetest 
+	
+56 tests should be running and passing
 
-#. Get OpenPTV-Python::    
+#. Get `pbi` or `pyptv`, an example is for `pyptv` here::    
 
 	 cd ~/openptv
-	 git clone git://github.com/OpenPTV/openptv-python.git
-	 cd openptv-python/pyptv_gui
-	 python setup.py build_ext --inplace -I/usr/local/include -L/usr/local/lib
+	 git clone git://github.com/alexlib/pyptv.git
+	 cd pyptv/pyptv_gui
+	 python setup.py install
 	 
 #. Get 3D-PTV test folder and create the `res/` folder if missing ::
 
@@ -113,11 +120,6 @@ If you encounter the error like this while trying to run the ``openptv-python``:
 
 	 python pyptv_gui.py ../../test_cavity
    
-    > Wrong experimental directory /home/hristo/ptv_test_folder
-	> src_path= /home/hristo/openptv-python/src_c
-	> Traceback (most recent call last):
-	> File "pyptv_gui.py", line 60, in <module>
-	> import ptv1 as ptv
 	> ImportError: liboptv.so: cannot open shared object file: No such file or
 	> directory 
 
@@ -171,8 +173,8 @@ below on the Windows install process). If you do so, remmember to make sure
 that your compiler knows the path to the installed location.
 
 
-Installing on Windows
----------------------
+Installing on Windows - outdated
+--------------------------------
 
 
 Unlike Linux and MacOS, which both implement POSIX standards (the Unix 
@@ -279,7 +281,7 @@ separated by a semicolon (;) charachter from the directories already listed.
 Installing Python environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We recommend using Canopy 2+ (from Enthought) to get all the necessary packages. The main ones are:: 
+We recommend using Enthought Canopy Distribution or Anaconda to get all the necessary packages. The main ones are:: 
 
     * Numpy
     * Scipy
@@ -289,35 +291,24 @@ We recommend using Canopy 2+ (from Enthought) to get all the necessary packages.
 
 
 
+For Windows 7 (8.1) there is an additional option to use pre-compiled binaries as explained here: `Installation on Windows 7 using MinGW <installation_windows_7_mingw32_precompiled.html>`_
+
+
+
 If nothing works, where I can get help?  
 ---------------------------------------
 
 Send your build logs, description of the problem and details of the operating system, Python version, etc. to our Google group or forum: <https://groups.google.com/forum/#!forum/openptv>
-
-
-If I do not want to build or test the software, can I use pre-compiled binaries?
----------------------------------------------------------------------------------
-
-Mac OS X users can use the `pre-compiled try-before-installing instructions <https://github.com/OpenPTV/openptv-python/wiki/Getting-started-using-OpenPTV-Python-on-Mac-OS-X>`_
-
-For Linux and Windows it is possible to download the appropriate pre-compiled library files: `liboptv installers <http://goo.gl/MqDzP>`_
- 
-The ``include`` folder content should be copied/installed to something like ``/usr/local/include`` and the ``lib`` content into ``/usr/local/lib``. Otherwise
-add the location of the ``liboptv`` files in the next step, e.g.::
-
- 	$ python setup.py install -I /usr/local/include -L /usr/local/lib
  	
 
-For Windows 7 (8.1) there is an additional option to use pre-compiled binaries as explained here: `Installation on Windows 7 using MinGW <installation_windows_7_mingw32_precompiled.html>`_
-
-
-Can I use a virtual machine? 
+Is there a virtual machine? 
 ----------------------------
 
 Yes, follow these instructions https://github.com/OpenPTV/openptv-python/wiki/No-Installation-with-Virtual-Machine 
 
 
-If I do not want to use package managers but to get all the Python packages at once?
-------------------------------------------------------------------------------------
+Is there a Docker? 
+------------------
 
-You can get one of the Python development environments for your platform. Some had good experiences with WinPython, PythonXY, Canopy and later Anaconda. NOTE THAT WE HAVE NOT TESTED PYTHON 3 AND WE ARE USING AND SUPPORTING PYTHON 2.X.
+Yes, follow this https://github.com/alexlib/dockerfiles and https://www.youtube.com/watch?v=tzOaI8SYFYs
+
