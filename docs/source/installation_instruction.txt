@@ -9,19 +9,21 @@ Introduction
 ------------
 
 
-The OpenPTV contains of two main parts: 
+The OpenPTV contains of these main parts: 
 
 #. Core library written in C, called `liboptv <http://github.com/OpenPTV/openptv/tree/master/liboptv>`_
-#. Python 2, Enthought ETS based frontend GUI and control entitled `openptv-python <http://github.com/OpenPTV/openptv-python>`_ (note that we support so far Python 2.x, Python 3 is not yet tested)
+#. Python bindings called, shipped together with the `liboptv`
+
+The Python bindings allow the easy access to the C library. There are two packages that are built around the Python bindings: 
+
+#. Python 2.7 with PyQt4 GUIs and command line scripts from Yosef Meller called The Particle Bureau of Investigation or `pbi <http://github.com/yosefm/pbi>`_ 
+#. Python 2.7 with Enthought based GUI (using TraitsUI and Chaco) called PyPTV or `openptv-python <http://github.com/alexlib/pyptv>`_
+
 
 
 The C library ``liboptv`` is using Check framework for the unit tests and Cmake project for the build. We recommend installing both software packages, however it is not obligatory, you may skip the relevant parts if you're not going to develop or test the library.
 
-
-The Python GUI is based on the great packages of NumPy, SciPy, Enthought TraitsUI, Cython (for linking to the ``liboptv``) and these have to be installed prior to installing ``openptv-python``. NOTE THAT WE ARE STILL USING PYTHON 2.X
-
-
-You need to install first ``liboptv`` and then it Python bindings and after that the ``openptv-python`` part to make OpenPTV working and accessible through GUI. It is possible, however, to use pre-compiled binaries for the ``liboptv``. We explain all the possibilities in this document. 
+One has to install first ``liboptv`` and the Python bindings and after that the `pbi` or `pyptv` (or both). 
 
 
 liboptv - a library of the OpenPTV algorithms
