@@ -6,7 +6,7 @@ Introduction
 
 In the future we would like to allow everyone to add their algorithms to the OpenPTV 
 library, named ``liboptv`` and develop several interfaces, combining it with the pre- 
-and post-processing routines using Python/NumPy/SciPy/PIL/Matplotlib/Mayavi/etc. See the existing repositories on http://github.com/OpenPTV
+and post-processing routines using Python/NumPy/SciPy/PIL/Matplotlib/etc. See the existing repositories on http://github.com/OpenPTV
 
 
 About 3D-PTV measurement method
@@ -219,6 +219,7 @@ References
   processing for particle tracking velocimetry, Experiments in Fluids,
   Volume 48, Issue 1, pp.105-110,
   `http://adsabs.harvard.edu/abs/2010ExFl...48..105K`_
++ Meller, Y. & Liberzon, A., (2016). Particle Data Management Software for 3DParticle Tracking Velocimetry and Related Applications – The Flowtracks Package. Journal of Open Research Software. 4(1), p.e23. DOI: `http://doi.org/10.5334/jors.101`_
 
 
 .. |3dptv| image:: ../images/3dptv.png
