@@ -18,9 +18,8 @@ This is absolutely not a comprehensive guide of git development, and it is only 
 3. Clone OpenPTV repositories using::
 
 	git clone http://github.com/openptv/openptv.git
-	git clone http://github.com/openptv/openptv-python.git
     
-4. create a branch `new_feature` either in ``liboptv`` or in ``openptv-python`` where you implement your new feature.
+4. create a branch `new_feature` either in ``liboptv`` where you implement your new feature.
 5. Fix, change, implement, document code, ...
 6. From time to time fetch and merge your master branch with that of the main repository.
 7. Be sure that everything is ok and works in your branch.
