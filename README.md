@@ -1,9 +1,9 @@
-OpenPTV-Python (PyPTV)
+OpenPTV
 ======================
 
-**OpenPTV-Python** (a.k.a **PyPTV**) is the Python version of [OpenPTV](http://www.openptv.net). It is basically the Python Traits GUI (from Enthought Inc.) that *interfaces* the OpenPTV library that includes all the core algorithms (correspondence, tracking, calibration, etc.) written in ANSI C. 
+[OpenPTV](http://www.openptv.net) is an open source particle image velocimetry library (`liboptv`) written in ANSI C [liboptv](http://github.com/openptv/openptv), and GUI packages in Python, [pyptv](http://github.com/alexlib/pyptv) or [pbi](http://github.com/yosefm/pbi)
 
-Both PyPTV and the OpenPTV library are in the development phase and continuously refactored. Please follow the development on the community mailing list:
+Please follow the development on the community mailing list:
 
 	openptv@googlegroups.com
 
@@ -22,10 +22,6 @@ or:
 
 		pythonw pyptv_gui/pyptv_gui.py test_cavity
 		
-It is possible to install wxPython instead of PyQt4, and switch between those:  
-
-		ETS_TOOLKIT=wx python pyptv_gui.py test_cavity
-
 Follow the instructions in our **screencasts and tutorials**:
   
   *  Tutorial 1: <http://youtu.be/S2fY5WFsFwo>  
@@ -33,9 +29,5 @@ Follow the instructions in our **screencasts and tutorials**:
   *  Tutorial 2: <http://www.youtube.com/watch?v=_JxFxwVDSt0>   
   
   *  Tutorial 3: <http://www.youtube.com/watch?v=z1eqFL5JIJc>  
-  
-  
-Ask for help on our mailing list:
 
-	openptv@googlegroups.com
 
