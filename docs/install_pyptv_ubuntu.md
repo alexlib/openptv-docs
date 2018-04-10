@@ -56,9 +56,9 @@ Download from <http://sourceforge.net/projects/check/files/latest/download?sourc
 
 5. Download and install `openptv-python`:  
 
-		$ git clone git://github.com/OpenPTV/openptv-python.git
+		$ git clone git://github.com/alexlib/pyptv.git
 		$ cd openptv-python/pyptv_gui
-		$ python setup.py build_ext --inplace
+		$ python setup.py install
 
 6. For the test, get the test_folder and see if it works:
 		$ cd ~
