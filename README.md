@@ -1,5 +1,7 @@
 OpenPTV
 ======================
+[![Documentation Status](https://readthedocs.org/projects/openptv-python/badge/?version=latest)](http://openptv-python.readthedocs.io/en/latest/?badge=latest)
+
 
 [OpenPTV](http://www.openptv.net) is an open source particle image velocimetry library (`liboptv`) written in ANSI C [liboptv](http://github.com/openptv/openptv), and GUI packages in Python, [pyptv](http://github.com/alexlib/pyptv) or [pbi](http://github.com/yosefm/pbi)
 
